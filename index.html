@@ -23,7 +23,7 @@
                 .data(data)
                 .enter()
                 .append("rect")
-                .attr("width", function (d) { return d; })
+                .attr("width", function (d, i) { return 200 / i; })
                 .attr("height", function (d) { return 10; })
                 .attr("fill", "blue")
         }
