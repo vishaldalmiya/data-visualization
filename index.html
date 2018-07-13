@@ -24,7 +24,7 @@
                 .enter()
                 .append("rect")
                 .attr("width", function (d, i) { return 200; })
-                .attr("height", function (d) { return 10; })
+                .attr("height", function (d, i) { return 10 + i*5; })
                 .attr("fill", "blue")
         }
         )
