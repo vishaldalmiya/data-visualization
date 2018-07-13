@@ -9,10 +9,11 @@
 <body>
 
     <script> 
-        var data = [10, 20, 30, 40, 50];
+        var g_data;
         var height = 500
         var width = 500
         d3.csv("honeyproduction.csv", function (data) {
+            g_data = data
             var canvas = d3.select("body")
                 .append("svg")
                 .attr("width", width)
