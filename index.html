@@ -12,8 +12,7 @@
         var data = [10, 20, 30, 40, 50];
         var height = 500
         var width = 500
-        // var path = "https://github.com/vishaldalmiya/data-visualization/blob/master/honeyproduction.csv"
-        d3.csv("https://github.com/vishaldalmiya/data-visualization/blob/master/honeyproduction.csv", function (data) {
+        d3.csv("honeyproduction.csv", function (data) {
             var canvas = d3.select("body")
                 .append("svg")
                 .attr("width", width)
