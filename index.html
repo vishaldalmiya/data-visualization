@@ -9,12 +9,17 @@
 <body>
 
     <script> 
-        var g_data;
+        function display(data)
+        {
+            for(d in data)
+            {
+                console.log(d)
+            }
+        }
         var height = 500
         var width = 500
         d3.csv("honeyproduction.csv", function (data) {
-            g_data = data
-            console.log(data)
+            display(data)
             var canvas = d3.select("body")
                 .append("svg")
                 .attr("width", width)
