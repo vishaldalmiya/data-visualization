@@ -23,7 +23,7 @@ function honey_production_dv() {
         .rangeRound([height, 0]);
 
     var line = d3.line()
-        .curve(d3.curveBasis)
+        //.curve(d3.curveBasis)
         .x(function (d) { return x(d.year); })
         .y(function (d) { return y(d.totalprod); });
 
@@ -54,14 +54,24 @@ function honey_production_dv() {
             .attr("y", 6)
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
-            .text("totalprod (lb)");
+            .text("Total productions (lbs)");
 
         g.append("path")
             .datum(data)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
+            // .attr("stroke-linejoin", "bevel")
+            // .attr("stroke-linecap", "bevel")
+            .attr("stroke-width", 1.5)
+            .attr("d", line);
+
+        data = state_data["ND"]
+        g.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            // .attr("stroke-linejoin", "bevel")
+            // .attr("stroke-linecap", "bevel")
             .attr("stroke-width", 1.5)
             .attr("d", line);
     }
