@@ -11,7 +11,7 @@ function parse_state_data(data) {
 
 function honey_production_dv() {
     var svg = d3.select("svg"),
-        margin = { top: 20, right: 80, bottom: 30, left: 100 },
+        margin = { top: 150, right: 80, bottom: 30, left: 100 },
         width = svg.attr("width") - margin.left - margin.right,
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -47,7 +47,7 @@ function honey_production_dv() {
         range[0] = 0
         console.log(range)
         y.domain(range);
-        
+
 
         g.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -69,22 +69,30 @@ function honey_production_dv() {
             .datum(data)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
-            // .attr("stroke-linejoin", "bevel")
-            // .attr("stroke-linecap", "bevel")
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", 2.0)
             .attr("d", line)
-            .text("ND");
+            
+        g.append('text')
+            .attr('class', 'barsEndlineText')
+            .attr('text-anchor', 'middle')
+            .attr("x", x(data[data.length - 1].year))
+            .attr("y", y(data[data.length - 1].totalprod))
+            .text('ND')
 
         data = state_data["CA"]
         g.append("path")
             .datum(data)
             .attr("fill", "none")
             .attr("stroke", "red")
-            // .attr("stroke-linejoin", "bevel")
-            // .attr("stroke-linecap", "bevel")
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", 2.0)
             .attr("d", line)
-            .text("CA");
+
+        g.append('text')
+            .attr('class', 'barsEndlineText')
+            .attr('text-anchor', 'middle')
+            .attr("x", x(data[data.length - 1].year))
+            .attr("y", y(data[data.length - 1].totalprod))
+            .text('CA')
     }
     )
 }
