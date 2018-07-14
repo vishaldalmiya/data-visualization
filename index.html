@@ -3,39 +3,14 @@
 
 <head>
     <title>Honey Production in US</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"> </script>
+    <script src="http://d3js.org/d3.v3.min.js"> </script>
+    <script src="honey_production.js"></script>
 </head>
 
 <body>
 
     <script> 
-        function display(data)
-        {
-            for(d in data)
-            {
-                console.log(d.state)
-                console.log(d.totalprod)
-            }
-        }
-        var height = 500
-        var width = 500
-        d3.csv("honeyproduction.csv", function (data) {
-            display(data)
-            var canvas = d3.select("body")
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height)
-
-            canvas.selectAll("rect")
-                .data(data)
-                .enter()
-                .append("rect")
-                .attr("width", function (d, i) { return 200; })
-                .attr("height", function (d, i) { return i*20; })
-                .attr("fill", "blue")
-        }
-        )
-
+        honey_production_dv();
     </script>
 </body>
 
