@@ -30,15 +30,24 @@ function honey_production_dv() {
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
 
-        data = state_data["CA"]
+        data = state_data["ND"]
 
-        x.domain(d3.extent(data, function (d) {
-            console.log(d.state)
-            console.log(d.totalprod)
-            console.log(d.year)
+        console.log(d3.extent(db, function (d) { return d.totalprod; }))
+        console.log(d3.extent(db, function (d) { return d.year; }))
+
+        x.domain(d3.extent(db, function (d) {
+            // console.log(d.state)
+            // console.log(d.totalprod)
+            // console.log(d.year)
             return d.year;
         }));
-        y.domain(d3.extent(data, function (d) { return d.totalprod; }));
+
+        // todo: the domain range is incorrect
+        var range = d3.extent(data, function (d) { return d.totalprod; })
+        range[0] = 0
+        console.log(range)
+        y.domain(range);
+        
 
         g.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -63,9 +72,10 @@ function honey_production_dv() {
             // .attr("stroke-linejoin", "bevel")
             // .attr("stroke-linecap", "bevel")
             .attr("stroke-width", 1.5)
-            .attr("d", line);
+            .attr("d", line)
+            .text("ND");
 
-        data = state_data["ND"]
+        data = state_data["CA"]
         g.append("path")
             .datum(data)
             .attr("fill", "none")
@@ -73,7 +83,8 @@ function honey_production_dv() {
             // .attr("stroke-linejoin", "bevel")
             // .attr("stroke-linecap", "bevel")
             .attr("stroke-width", 1.5)
-            .attr("d", line);
+            .attr("d", line)
+            .text("CA");
     }
     )
 }
