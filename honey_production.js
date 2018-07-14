@@ -6,7 +6,7 @@ function parse_totalprod(data) {
             state_db[data[d].state]["year"].push(data[d].year)
         }
         else {
-            state_db[data[d].state] = {"totalprod": [], "year": []}
+            state_db[data[d].state] = { "totalprod": [], "year": [] }
         }
     }
     return state_db
@@ -16,7 +16,7 @@ function draw_line_chart(data) {
 
 }
 
-function set_up() {
+function line_chart(data) {
     var height = 500
     var width = 960
 
@@ -39,23 +39,40 @@ function set_up() {
         .curve(d3.curveBasis)
         .x(function (d) { return x(d.totalprod); })
         .y(function (d) { return y(d.year); });
+
+    x.domain(d3.extent(data, function (d) { return d.totalprod; }));
+    y.domain(d3.extent(data, function (d) { return d.year; }));
+
+    g.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .select(".domain")
+        .remove();
+
+    g.append("g")
+        .call(d3.axisLeft(y))
+        .append("text")
+        .attr("fill", "#000")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .text("totalprod (lb)");
+
+    g.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1.5)
+        .attr("d", line);
 }
 
 function honey_production_dv() {
-
-
     d3.csv("honeyproduction.csv", function (data) {
         var totalprod = parse_totalprod(data)
-
-
-
-        canvas.selectAll("rect")
-            .data(data)
-            .enter()
-            .append("rect")
-            .attr("width", function (d, i) { return 200; })
-            .attr("height", function (d) { return 10; })
-            .attr("fill", "blue")
+        line_chart(totalprod["CA"])
     }
     )
 }
