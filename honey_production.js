@@ -53,6 +53,7 @@ function honey_production_dv() {
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .select(".domain")
+            .text("Year")
             .remove();
 
         g.append("g")
