@@ -1,13 +1,10 @@
-function parse_totalprod(data) {
+function parse_state_data(data) {
     var state_db = {}
     for (d in data) {
-        if (data[d].state in state_db) {
-            state_db[data[d].state]["totalprod"].push(data[d].totalprod)
-            state_db[data[d].state]["year"].push(data[d].year)
+        if (!(data[d].state in state_db)) {
+            state_db[data[d].state] = []
         }
-        else {
-            state_db[data[d].state] = { "totalprod": [], "year": [] }
-        }
+        state_db[data[d].state].push(data[d])
     }
     return state_db
 }
@@ -30,17 +27,25 @@ function honey_production_dv() {
         .x(function (d) { return x(d.year); })
         .y(function (d) { return y(d.totalprod); });
 
-    d3.csv("honeyproduction.csv", function (data) {
-        var totalprod = parse_totalprod(data)
-        x.domain(d3.extent(data, function (d) { return d.year; }));
+    d3.csv("honeyproduction.csv", function (db) {
+        var state_data = parse_state_data(db)
+
+        data = state_data["CA"]
+
+        x.domain(d3.extent(data, function (d) {
+            console.log(d.state)
+            console.log(d.totalprod)
+            console.log(d.year)
+            return d.year;
+        }));
         y.domain(d3.extent(data, function (d) { return d.totalprod; }));
-    
+
         g.append("g")
             .attr("transform", "translate(0," + height + ")")
             .call(d3.axisBottom(x))
             .select(".domain")
             .remove();
-    
+
         g.append("g")
             .call(d3.axisLeft(y))
             .append("text")
@@ -50,16 +55,15 @@ function honey_production_dv() {
             .attr("dy", "0.71em")
             .attr("text-anchor", "end")
             .text("totalprod (lb)");
-    
+
         g.append("path")
-            .datum(totalprod["CA"])
+            .datum(data)
             .attr("fill", "none")
             .attr("stroke", "steelblue")
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
             .attr("stroke-width", 1.5)
             .attr("d", line);
-        //line_chart(totalprod["CA"])
     }
     )
 }
