@@ -33,9 +33,26 @@ function sort_state_by_totalprod(state_db) {
     return get_sorted_hash(state_totalprod)
 }
 
+function draw_line_chart(g, data, line, x_scale, y_scale, color, state) {
+    g.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", color)
+        .attr("stroke-width", 2.0)
+        .attr("d", line)
 
+    g.append('text')
+        .attr('class', 'barsEndlineText')
+        .attr('text-anchor', 'middle')
+        .attr("x", x_scale(data[data.length - 1].year))
+        .attr("y", y_scale(data[data.length - 1].totalprod))
+        .text(state)
+}
 
 function honey_production_dv() {
+    num_top_state_by_totalprod = 7
+    num_bottom_state_by_totalprod = 2
+
     var svg = d3.select("svg"),
         margin = { top: 150, right: 80, bottom: 30, left: 100 },
         width = svg.attr("width") - margin.left - margin.right,
@@ -49,23 +66,17 @@ function honey_production_dv() {
         .rangeRound([height, 0]);
 
     var line = d3.line()
-        //.curve(d3.curveBasis)
         .x(function (d) { return x(d.year); })
         .y(function (d) { return y(d.totalprod); });
 
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
 
-        temp = sort_state_by_totalprod(state_data)
+        state_totalprod = sort_state_by_totalprod(state_data)
+
         data = state_data["ND"]
 
-        console.log(d3.extent(db, function (d) { return d.totalprod; }))
-        console.log(d3.extent(db, function (d) { return d.year; }))
-
         x.domain(d3.extent(db, function (d) {
-            // console.log(d.state)
-            // console.log(d.totalprod)
-            // console.log(d.year)
             return d.year;
         }));
 
@@ -93,34 +104,9 @@ function honey_production_dv() {
             .attr("text-anchor", "end")
             .text("Total productions (lbs)");
 
-        g.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 2.0)
-            .attr("d", line)
-
-        g.append('text')
-            .attr('class', 'barsEndlineText')
-            .attr('text-anchor', 'middle')
-            .attr("x", x(data[data.length - 1].year))
-            .attr("y", y(data[data.length - 1].totalprod))
-            .text('ND')
-
+        draw_line_chart(g, data, line, x, y, "steelblue", "ND")
         data = state_data["CA"]
-        g.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "red")
-            .attr("stroke-width", 2.0)
-            .attr("d", line)
-
-        g.append('text')
-            .attr('class', 'barsEndlineText')
-            .attr('text-anchor', 'middle')
-            .attr("x", x(data[data.length - 1].year))
-            .attr("y", y(data[data.length - 1].totalprod))
-            .text('CA')
+        draw_line_chart(g, data, line, x, y, "red", "CA")
     }
     )
 }
