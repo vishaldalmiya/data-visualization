@@ -9,6 +9,32 @@ function parse_state_data(data) {
     return state_db
 }
 
+function get_sorted_hash(inputHash) {
+    var resultHash = {};
+
+    var keys = Object.keys(inputHash);
+    keys.sort(function (a, b) {
+        return inputHash[a] - inputHash[b]
+    }).reverse().forEach(function (k) {
+        resultHash[k] = inputHash[k];
+    });
+    return resultHash;
+}
+
+function sort_state_by_totalprod(state_db) {
+    state_totalprod = {}
+    for (state in state_db) {
+        sum_totalprod = 0
+        for (idx in state_db[state]) {
+            sum_totalprod += parseInt(state_db[state][idx].totalprod)
+        }
+        state_totalprod[sum_totalprod] = state
+    }
+    return get_sorted_hash(state_totalprod)
+}
+
+
+
 function honey_production_dv() {
     var svg = d3.select("svg"),
         margin = { top: 150, right: 80, bottom: 30, left: 100 },
@@ -30,6 +56,7 @@ function honey_production_dv() {
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
 
+        temp = sort_state_by_totalprod(state_data)
         data = state_data["ND"]
 
         console.log(d3.extent(db, function (d) { return d.totalprod; }))
@@ -72,7 +99,7 @@ function honey_production_dv() {
             .attr("stroke", "steelblue")
             .attr("stroke-width", 2.0)
             .attr("d", line)
-            
+
         g.append('text')
             .attr('class', 'barsEndlineText')
             .attr('text-anchor', 'middle')
