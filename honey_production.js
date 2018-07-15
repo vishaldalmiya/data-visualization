@@ -49,7 +49,22 @@ function draw_line_chart(g, data, line, x_scale, y_scale, color, state) {
         .text(state)
 }
 
+function navigate() {
+    var element = document.getElementById("navigator");
+    switch (element.innerText) {
+        case "Overview":
+            element.innerText = "Next";
+            break;
+        case "Next":
+            honey_production_dv()
+            break;
+    }
+}
+
 function honey_production_dv() {
+    // change the appearance of the button
+
+
     // todo: take the num as input
     num_top_state_by_totalprod = 7
     num_bottom_state_by_totalprod = 2
