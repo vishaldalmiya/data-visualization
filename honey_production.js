@@ -50,8 +50,11 @@ function draw_line_chart(g, data, line, x_scale, y_scale, color, state) {
 }
 
 function honey_production_dv() {
+    // todo: take the num as input
     num_top_state_by_totalprod = 7
     num_bottom_state_by_totalprod = 2
+
+    var colors = ["red", "yellow", "green", "blue", "pink", "grey", "orange", "brown", "purple"]
 
     var svg = d3.select("svg"),
         margin = { top: 150, right: 80, bottom: 30, left: 100 },
@@ -105,18 +108,20 @@ function honey_production_dv() {
 
         // get the list of states by totalprod
         var keys = Object.keys(sorted_state_totalprod);
-        var sorted_states = keys.map(function (v) { return sorted_state_totalprod[v]; });
+        var sorted_state_name_totalprod = keys.map(function (v) { return sorted_state_totalprod[v]; });
 
-        // plot bottom two states
+        var color_idx = 0
+        // plot bottom two states by totalprod
         for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
-            draw_line_chart(g, state_data[sorted_states[i]], line, x, y, "red", sorted_states[i])
+            draw_line_chart(g, state_data[sorted_state_name_totalprod[i]],
+                line, x, y, colors[color_idx++], sorted_state_name_totalprod[i])
         }
 
-        // plot top eight states
+        // plot top seven states by totalprod
         // todo: unknown entry at the end
-        for (var i = 1; i < num_top_state_by_totalprod; i++) {
-            state_name = sorted_states[sorted_states.length - 1 - i]
-            draw_line_chart(g, state_data[state_name], line, x, y, "red", state_name)
+        for (var i = 1; i <= num_top_state_by_totalprod; i++) {
+            state_name = sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i]
+            draw_line_chart(g, state_data[state_name], line, x, y, colors[color_idx++], state_name)
         }
     }
     )
