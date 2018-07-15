@@ -94,7 +94,7 @@ function display_overview() {
         .attr('text-anchor', 'middle')
         .attr("x", width / 2)
         .attr("y", height / 2)
-        .text("Honey Production in US")
+        .text("Overview: The following data set (source @ https://www.kaggle.com/jessicali9530/honey-production) consists of honey production supply and demand in US per state between years 1998 to 2012. In the year 2006 there was decline in the yield due to the loss of large number of hives resulting out of a phenomenon called Colony Collapse Disorder where disappearing workers bees cause the remaining hive colony to collapse. It was speculated that the hive diseases and pesticides were the root cause for this. 12 years post the incidence although there is recovery in the honey bees and their colonies, the US honey industry is mostly struggling. US which used to produce over half the honey consumed per year largely depends on honey imports to meet its demands now. The data is coming from National Agricultural Statistics Service (NASS). Some data cleaning was performed to get the final data used for the analysis. ")
 
 }
 
@@ -172,6 +172,33 @@ function display_priceperlb() {
             state_name = sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i]
             draw_priceperlb_line_chart(g, state_data[state_name], line, x, y, colors[color_idx++], state_name)
         }
+
+        var legendRectSize = 18;                                  // NEW
+        var legendSpacing = 4;                                    // NEW
+
+        var legend = svg.selectAll('.legend')                     // NEW
+            .data(colors)                                   // NEW
+            .enter()                                                // NEW
+            .append('g')                                            // NEW
+            .attr('class', 'legend')                                // NEW
+            .attr('transform', function (d, i) {                     // NEW
+                var n_height = 10 + legendRectSize + legendSpacing;          // NEW
+                var offset = n_height * colors.length / 2;     // NEW
+                var horz = 2 * legendRectSize;                       // NEW
+                var vert = i * n_height - offset;                       // NEW
+                return 'translate(' + horz + ',' + vert + ')';        // NEW
+            });                                                     // NEW
+
+        legend.append('rect')                                     // NEW
+            .attr('width', legendRectSize)                          // NEW
+            .attr('height', legendRectSize)                         // NEW
+            .style('fill', colors)                                   // NEW
+            .style('stroke', colors);                                // NEW
+
+        legend.append('text')                                     // NEW
+            .attr('x', legendRectSize + legendSpacing)              // NEW
+            .attr('y', legendRectSize - legendSpacing)              // NEW
+            .text(function (d) { return d; });                       // NEW
     }
     )
 }
