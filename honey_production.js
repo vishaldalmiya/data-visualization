@@ -53,18 +53,32 @@ function navigate() {
     var element = document.getElementById("navigator");
     switch (element.innerText) {
         case "Overview":
+            display_overview()
             element.innerText = "Next";
             break;
         case "Next":
-            honey_production_dv()
+            display_totalprod()
             break;
     }
 }
 
-function honey_production_dv() {
-    // change the appearance of the button
+function display_overview() {
+    var svg = d3.select("svg"),
+        margin = { top: 150, right: 80, bottom: 30, left: 100 },
+        width = svg.attr("width") - margin.left - margin.right,
+        height = svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    g.append('text')
+        .attr('class', 'barsEndlineText')
+        .attr('text-anchor', 'middle')
+        .attr("x", width / 2)
+        .attr("y", height / 2)
+        .text("Honey Production in US")
 
+}
+
+function display_totalprod() {
     // todo: take the num as input
     num_top_state_by_totalprod = 7
     num_bottom_state_by_totalprod = 2
