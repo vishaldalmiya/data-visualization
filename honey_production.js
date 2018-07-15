@@ -72,7 +72,7 @@ function honey_production_dv() {
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
 
-        state_totalprod = sort_state_by_totalprod(state_data)
+        sorted_state_totalprod = sort_state_by_totalprod(state_data)
 
         data = state_data["ND"]
 
@@ -85,7 +85,6 @@ function honey_production_dv() {
         range[0] = 0
         console.log(range)
         y.domain(range);
-
 
         g.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -104,9 +103,21 @@ function honey_production_dv() {
             .attr("text-anchor", "end")
             .text("Total productions (lbs)");
 
-        draw_line_chart(g, data, line, x, y, "steelblue", "ND")
-        data = state_data["CA"]
-        draw_line_chart(g, data, line, x, y, "red", "CA")
+        // get the list of states by totalprod
+        var keys = Object.keys(sorted_state_totalprod);
+        var sorted_states = keys.map(function (v) { return sorted_state_totalprod[v]; });
+
+        // plot bottom two states
+        for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
+            draw_line_chart(g, state_data[sorted_states[i]], line, x, y, "red", sorted_states[i])
+        }
+
+        // plot top eight states
+        // todo: unknown entry at the end
+        for (var i = 1; i < num_top_state_by_totalprod; i++) {
+            state_name = sorted_states[sorted_states.length - 1 - i]
+            draw_line_chart(g, state_data[state_name], line, x, y, "red", state_name)
+        }
     }
     )
 }
