@@ -57,7 +57,7 @@ function navigate() {
             element.innerText = "Next";
             break;
         case "Next":
-            display_totalprod()
+            location.href="totalprod.html"
             break;
     }
 }
