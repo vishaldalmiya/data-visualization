@@ -176,17 +176,20 @@ function display_priceperlb() {
         var legendRectSize = 18;                                  // NEW
         var legendSpacing = 4;                                    // NEW
 
+        var color = d3.scaleOrdinal(d3.schemeCategory20b);
+        console.log(color)
         var legend = svg.selectAll('.legend')                     // NEW
             .data(colors)                                   // NEW
             .enter()                                                // NEW
             .append('g')                                            // NEW
             .attr('class', 'legend')                                // NEW
             .attr('transform', function (d, i) {                     // NEW
-                var n_height = 10 + legendRectSize + legendSpacing;          // NEW
-                var offset = n_height * colors.length / 2;     // NEW
-                var horz = 2 * legendRectSize;                       // NEW
-                var vert = i * n_height - offset;                       // NEW
-                return 'translate(' + horz + ',' + vert + ')';        // NEW
+                // NEW
+                var legend_height = legendRectSize + legendSpacing;          // NEW
+                var offset = legend_height * colors.length / 2;     // NEW
+                var horz = width + 125;                       // NEW
+                var vert = height / 2 + i * legend_height - offset;                       // NEW
+                return 'translate(' + horz + ',' + vert + ')';
             });                                                     // NEW
 
         legend.append('rect')                                     // NEW
