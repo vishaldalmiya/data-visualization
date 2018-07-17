@@ -81,8 +81,7 @@ function display_overview() {
 
 }
 
-function display_totalprod() {
-    y_axis_field = 'totalprod'
+function display_chart(field_y) {
 
     // todo: take the num as input
     get_filter_info();
@@ -96,11 +95,11 @@ function display_totalprod() {
 
         data = state_data["ND"]
 
-        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, y_axis_field);
+        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, field_y);
 
         var line = d3.line()
             .x(function (d) { return x_scale(d.year); })
-            .y(function (d) { return y_scale(d[y_axis_field]); });
+            .y(function (d) { return y_scale(d[field_y]); });
 
         display_axis(g, height, x_scale, y_scale);
 
@@ -113,47 +112,7 @@ function display_totalprod() {
         for (var i = 0; i < filtered_state_name.length; i++) {
             var state_name = filtered_state_name[i]
             draw_line_chart(g, state_data[state_name],
-                line, x_scale, y_scale, color_scale(state_name), y_axis_field)
-        }
-
-        display_legend(svg, color_scale, width, height);
-    }
-    )
-}
-
-function display_priceperlb() {
-    y_axis_field = 'priceperlb'
-
-    // todo: take the num as input
-    get_filter_info();
-
-    var { width, height, g, svg } = setup_svg();
-
-    d3.csv("honeyproduction.csv", function (db) {
-        var state_data = parse_state_data(db)
-
-        sorted_state_totalprod = sort_state_by_totalprod(state_data)
-
-        data = state_data["ND"]
-
-        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, y_axis_field);
-
-        var line = d3.line()
-            .x(function (d) { return x_scale(d.year); })
-            .y(function (d) { return y_scale(d[y_axis_field]); });
-
-        display_axis(g, height, x_scale, y_scale);
-
-        // get the list of states by totalprod
-        var { filtered_state_name, i } = get_filtered_state();
-
-        color_scale.domain(filtered_state_name)
-
-        // plot bottom two & top seven states states by totalprod
-        for (var i = 0; i < filtered_state_name.length; i++) {
-            var state_name = filtered_state_name[i]
-            draw_line_chart(g, state_data[state_name],
-                line, x_scale, y_scale, color_scale(state_name), y_axis_field)
+                line, x_scale, y_scale, color_scale(state_name), field_y)
         }
 
         display_legend(svg, color_scale, width, height);
