@@ -90,11 +90,15 @@ function display_chart(field_x, field_y, x_label, y_label) {
     var { width, height, g, svg, margin } = setup_svg();
 
     d3.csv("honeyproduction.csv", function (db) {
+
+        db.forEach(function (d) {
+            d[field_x] = +d[field_x];
+            d[field_y] = +d[field_y];
+        });
+
         var state_data = parse_state_data(db)
 
         sorted_state_totalprod = sort_state_by_totalprod(state_data)
-
-        data = state_data["ND"]
 
         var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, field_x, field_y);
 
@@ -118,13 +122,14 @@ function display_chart(field_x, field_y, x_label, y_label) {
 
         display_legend(svg, color_scale, width, height);
 
-        display_tooltip(g, height, width, svg, margin, 
-             x_scale, bisectDate, field_x, y_scale, field_y);
+        //display_tooltip(g, height, width, svg, margin, 
+        //  x_scale, bisectDate, field_x, y_scale, field_y);
     }
     )
 }
 
 function display_tooltip(g, height, width, svg, margin, x_scale, bisectDate, field_x, y_scale, field_y) {
+    // hello
     var focus = g.append("g")
         .attr("class", "focus")
         .style("display", "none");
@@ -146,7 +151,7 @@ function display_tooltip(g, height, width, svg, margin, x_scale, bisectDate, fie
         .attr("class", "overlay")
         .attr("width", width)
         .attr("height", height)
-        .on("mouseover", function () { focus.style("display", null); })
+        .on("mouseover", function () { focus.style("display", "none"); })
         .on("mouseout", function () { focus.style("display", "none"); })
         .on("mousemove", mousemove);
     function mousemove() {
@@ -170,14 +175,15 @@ function setup_scale(width, height, db, field_x, field_y) {
         .range([0, width]);
     var y_scale = d3.scaleLinear()
         .rangeRound([height, 0]);
+
     x_scale.domain(d3.extent(db, function (d) {
         return d[field_x];
     }));
 
-    // todo: the domain range is incorrect
-    var range = d3.extent(data, function (d) { return d[field_y]; });
-    range[0] = 0;
-    y_scale.domain(range);
+    y_scale.domain([0, d3.max(db, function (d) {
+        return d[field_y];
+    })]);
+
     return { x_scale, y_scale, color_scale };
 }
 
