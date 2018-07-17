@@ -33,7 +33,7 @@ function sort_state_by_totalprod(state_db) {
     return get_sorted_hash(state_totalprod)
 }
 
-function draw_line_chart(g, data, line, x_scale, y_scale, color, field) {
+function draw_line_chart(g, data, line, x_scale, y_scale, color, field_x, field_y) {
     g.append("path")
         .datum(data)
         .attr("fill", "none")
@@ -44,8 +44,8 @@ function draw_line_chart(g, data, line, x_scale, y_scale, color, field) {
     g.append('text')
         .attr('class', 'barsEndlineText')
         .attr('text-anchor', 'middle')
-        .attr("x", x_scale(data[data.length - 1].year))
-        .attr("y", y_scale(data[data.length - 1][field]))
+        .attr("x", x_scale(data[data.length - 1][field_x]))
+        .attr("y", y_scale(data[data.length - 1][field_y]))
 }
 
 function navigate() {
@@ -81,7 +81,7 @@ function display_overview() {
 
 }
 
-function display_chart(field_y) {
+function display_chart(field_x, field_y, x_label, y_label) {
 
     // todo: take the num as input
     get_filter_info();
@@ -95,13 +95,13 @@ function display_chart(field_y) {
 
         data = state_data["ND"]
 
-        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, field_y);
+        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, field_x, field_y);
 
         var line = d3.line()
-            .x(function (d) { return x_scale(d.year); })
+            .x(function (d) { return x_scale(d[field_x]); })
             .y(function (d) { return y_scale(d[field_y]); });
 
-        display_axis(g, height, x_scale, y_scale);
+        display_axis(g, height, x_scale, y_scale, x_label, y_label);
 
         // get the list of states by totalprod
         var { filtered_state_name, i } = get_filtered_state();
@@ -112,7 +112,7 @@ function display_chart(field_y) {
         for (var i = 0; i < filtered_state_name.length; i++) {
             var state_name = filtered_state_name[i]
             draw_line_chart(g, state_data[state_name],
-                line, x_scale, y_scale, color_scale(state_name), field_y)
+                line, x_scale, y_scale, color_scale(state_name), field_x, field_y)
         }
 
         display_legend(svg, color_scale, width, height);
@@ -125,18 +125,18 @@ function get_filter_info() {
     num_bottom_state_by_totalprod = 2;
 }
 
-function setup_scale(width, height, db, field) {
+function setup_scale(width, height, db, field_x, field_y) {
     var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
     var x_scale = d3.scaleLinear()
         .rangeRound([0, width]);
     var y_scale = d3.scaleLinear()
         .rangeRound([height, 0]);
     x_scale.domain(d3.extent(db, function (d) {
-        return d.year;
+        return d[field_x];
     }));
-    
+
     // todo: the domain range is incorrect
-    var range = d3.extent(data, function (d) { return d[field]; });
+    var range = d3.extent(data, function (d) { return d[field_y]; });
     range[0] = 0;
     y_scale.domain(range);
     return { x_scale, y_scale, color_scale };
@@ -168,12 +168,12 @@ function setup_svg() {
     return { width, height, g, svg };
 }
 
-function display_axis(g, height, x_scale, y_scale) {
+function display_axis(g, height, x_scale, y_scale, x_label, y_label) {
     g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x_scale))
         .select(".domain")
-        .text("Year")
+        .text(x_label)
         .remove();
     g.append("g")
         .call(d3.axisLeft(y_scale))
@@ -183,7 +183,7 @@ function display_axis(g, height, x_scale, y_scale) {
         .attr("y", 6)
         .attr("dy", "0.71em")
         .attr("text-anchor", "end")
-        .text("Avg. price per lb");
+        .text(y_label);
 }
 
 function display_legend(svg, color_scale, width, height) {
