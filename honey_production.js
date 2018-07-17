@@ -146,13 +146,16 @@ function get_filtered_state() {
     var keys = Object.keys(sorted_state_totalprod);
     var sorted_state_name_totalprod = keys.map(function (v) { return sorted_state_totalprod[v]; });
     var filtered_state_name = [];
-    for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
-        filtered_state_name.push(sorted_state_name_totalprod[i]);
-    }
+
     // todo: unknown entry at the end
     for (var i = 1; i <= num_top_state_by_totalprod; i++) {
         filtered_state_name.push(sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i]);
     }
+
+    for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
+        filtered_state_name.push(sorted_state_name_totalprod[i]);
+    }
+    
     return { filtered_state_name, i };
 }
 
@@ -169,12 +172,14 @@ function setup_svg() {
 }
 
 function display_axis(g, height, x_scale, y_scale, x_label, y_label) {
+    // todo: check why the label is not working
     g.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x_scale))
         .select(".domain")
         .text(x_label)
         .remove();
+
     g.append("g")
         .call(d3.axisLeft(y_scale))
         .append("text")
