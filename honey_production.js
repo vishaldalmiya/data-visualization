@@ -83,10 +83,11 @@ function display_overview() {
 
 function display_chart(field_x, field_y, x_label, y_label) {
 
+    var bisectDate = d3.bisector(function (d) { return d.year; }).left;
     // todo: take the num as input
     get_filter_info();
 
-    var { width, height, g, svg } = setup_svg();
+    var { width, height, g, svg, margin } = setup_svg();
 
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
@@ -116,8 +117,45 @@ function display_chart(field_x, field_y, x_label, y_label) {
         }
 
         display_legend(svg, color_scale, width, height);
+
+        display_tooltip(g, height, width, svg, margin, 
+             x_scale, bisectDate, field_x, y_scale, field_y);
     }
     )
+}
+
+function display_tooltip(g, height, width, svg, margin, x_scale, bisectDate, field_x, y_scale, field_y) {
+    var focus = g.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+    focus.append("line")
+        .attr("class", "x-hover-line hover-line")
+        .attr("y1", 0)
+        .attr("y2", height);
+    focus.append("line")
+        .attr("class", "y-hover-line hover-line")
+        .attr("x1", width)
+        .attr("x2", width);
+    focus.append("circle")
+        .attr("r", 7.5);
+    focus.append("text")
+        .attr("x", 15)
+        .attr("dy", ".31em");
+    svg.append("rect")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", function () { focus.style("display", null); })
+        .on("mouseout", function () { focus.style("display", "none"); })
+        .on("mousemove", mousemove);
+    function mousemove() {
+        var x0 = x_scale.invert(d3.mouse(this)[0]), i = bisectDate(data, x0, 1), d0 = data[i - 1], d1 = data[i], d = x0 - d0.year > d1.year - x0 ? d1 : d0;
+        focus.attr("transform", "translate(" + x_scale(d[field_x]) + "," + y_scale(d[field_y]) + ")");
+        focus.select("text").text(function () { return d[field_y]; });
+        focus.select(".x-hover-line").attr("y2", height - y_scale(d[field_y]));
+        focus.select(".y-hover-line").attr("x2", width + width);
+    }
 }
 
 function get_filter_info() {
@@ -127,8 +165,9 @@ function get_filter_info() {
 
 function setup_scale(width, height, db, field_x, field_y) {
     var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
+    // todo: check on this
     var x_scale = d3.scaleLinear()
-        .rangeRound([0, width]);
+        .range([0, width]);
     var y_scale = d3.scaleLinear()
         .rangeRound([height, 0]);
     x_scale.domain(d3.extent(db, function (d) {
@@ -155,7 +194,7 @@ function get_filtered_state() {
     for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
         filtered_state_name.push(sorted_state_name_totalprod[i]);
     }
-    
+
     return { filtered_state_name, i };
 }
 
@@ -168,12 +207,13 @@ function setup_svg() {
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    return { width, height, g, svg };
+    return { width, height, g, svg, margin };
 }
 
 function display_axis(g, height, x_scale, y_scale, x_label, y_label) {
     // todo: check why the label is not working
     g.append("g")
+        .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x_scale))
         .select(".domain")
