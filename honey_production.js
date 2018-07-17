@@ -33,7 +33,7 @@ function sort_state_by_totalprod(state_db) {
     return get_sorted_hash(state_totalprod)
 }
 
-function draw_totalprod_line_chart(g, data, line, x_scale, y_scale, color, state) {
+function draw_line_chart(g, data, line, x_scale, y_scale, color, field) {
     g.append("path")
         .datum(data)
         .attr("fill", "none")
@@ -45,24 +45,7 @@ function draw_totalprod_line_chart(g, data, line, x_scale, y_scale, color, state
         .attr('class', 'barsEndlineText')
         .attr('text-anchor', 'middle')
         .attr("x", x_scale(data[data.length - 1].year))
-        .attr("y", y_scale(data[data.length - 1].totalprod))
-        .text(state)
-}
-
-function draw_priceperlb_line_chart(g, data, line, x_scale, y_scale, color, state) {
-    g.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", color)
-        .attr("stroke-width", 2.0)
-        .attr("d", line)
-
-    g.append('text')
-        .attr('class', 'barsEndlineText')
-        .attr('text-anchor', 'middle')
-        .attr("x", x_scale(data[data.length - 1].year))
-        .attr("y", y_scale(data[data.length - 1].priceperlb))
-        .text(state)
+        .attr("y", y_scale(data[data.length - 1][field]))
 }
 
 function navigate() {
@@ -98,28 +81,13 @@ function display_overview() {
 
 }
 
-function display_priceperlb() {
+function display_totalprod() {
+    y_axis_field = 'totalprod'
+
     // todo: take the num as input
-    num_top_state_by_totalprod = 7
-    num_bottom_state_by_totalprod = 2
+    get_filter_info();
 
-    var color_scale = d3.scaleOrdinal(d3.schemeCategory10)
-
-    var svg = d3.select("svg"),
-        margin = { top: 150, right: 80, bottom: 30, left: 100 },
-        width = svg.attr("width") - margin.left - margin.right,
-        height = svg.attr("height") - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var x_scale = d3.scaleLinear()
-        .rangeRound([0, width]);
-
-    var y_scale = d3.scaleLinear()
-        .rangeRound([height, 0]);
-
-    var line = d3.line()
-        .x(function (d) { return x_scale(d.year); })
-        .y(function (d) { return y_scale(d.priceperlb); });
+    var { width, height, g, svg } = setup_svg();
 
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
@@ -128,110 +96,38 @@ function display_priceperlb() {
 
         data = state_data["ND"]
 
-        x_scale.domain(d3.extent(db, function (d) {
-            return d.year;
-        }));
+        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, y_axis_field);
 
-        // todo: the domain range is incorrect
-        var range = d3.extent(data, function (d) { return d.priceperlb; })
-        range[0] = 0
-        console.log(range)
-        y_scale.domain(range);
+        var line = d3.line()
+            .x(function (d) { return x_scale(d.year); })
+            .y(function (d) { return y_scale(d[y_axis_field]); });
 
-        g.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x_scale))
-            .select(".domain")
-            .text("Year")
-            .remove();
-
-        g.append("g")
-            .call(d3.axisLeft(y_scale))
-            .append("text")
-            .attr("fill", "#000")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", "0.71em")
-            .attr("text-anchor", "end")
-            .text("Avg. price per lb");
+        display_axis(g, height, x_scale, y_scale);
 
         // get the list of states by totalprod
-        var keys = Object.keys(sorted_state_totalprod);
-        var sorted_state_name_totalprod = keys.map(function (v) { return sorted_state_totalprod[v]; });
-
-        var filtered_state_name = []
-        for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
-            filtered_state_name.push(sorted_state_name_totalprod[i])
-        }
-
-        // todo: unknown entry at the end
-        for (var i = 1; i <= num_top_state_by_totalprod; i++) {
-            filtered_state_name.push(sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i])
-        }
+        var { filtered_state_name, i } = get_filtered_state();
 
         color_scale.domain(filtered_state_name)
 
         // plot bottom two & top seven states states by totalprod
         for (var i = 0; i < filtered_state_name.length; i++) {
             var state_name = filtered_state_name[i]
-            draw_priceperlb_line_chart(g, state_data[state_name],
-                line, x_scale, y_scale, color_scale(state_name), state_name)
+            draw_line_chart(g, state_data[state_name],
+                line, x_scale, y_scale, color_scale(state_name), y_axis_field)
         }
 
-        var legendRectSize = 18;                                  // NEW
-        var legendSpacing = 4;                                    // NEW
-
-        var legend = svg.selectAll('.legend')                     // NEW
-            .data(color_scale.domain())                                   // NEW
-            .enter()                                                // NEW
-            .append('g')                                            // NEW
-            .attr('class', 'legend')                                // NEW
-            .attr('transform', function (d, i) {                     // NEW
-                // NEW
-                var legend_height = legendRectSize + legendSpacing;          // NEW
-                var offset = legend_height * color_scale.length / 2;     // NEW
-                var horz = width + 125;                       // NEW
-                var vert = height / 2 + i * legend_height - offset;                       // NEW
-                return 'translate(' + horz + ',' + vert + ')';
-            });                                                     // NEW
-
-        legend.append('rect')                                     // NEW
-            .attr('width', legendRectSize)                          // NEW
-            .attr('height', legendRectSize)                         // NEW
-            .style('fill', color_scale)                                   // NEW
-            .style('stroke', color_scale);                                // NEW
-
-        legend.append('text')                                     // NEW
-            .attr('x', legendRectSize + legendSpacing)              // NEW
-            .attr('y', legendRectSize - legendSpacing)              // NEW
-            .text(function (d) { return d; });                       // NEW
+        display_legend(svg, color_scale, width, height);
     }
     )
 }
 
-function display_totalprod() {
+function display_priceperlb() {
+    y_axis_field = 'priceperlb'
+
     // todo: take the num as input
-    num_top_state_by_totalprod = 7
-    num_bottom_state_by_totalprod = 2
+    get_filter_info();
 
-    // var colors = ["red", "yellow", "green", "blue", "pink", "grey", "orange", "brown", "purple"]
-    var colors = d3.scaleOrdinal(d3.schemeCategory10)
-
-    var svg = d3.select("svg"),
-        margin = { top: 150, right: 80, bottom: 30, left: 100 },
-        width = svg.attr("width") - margin.left - margin.right,
-        height = svg.attr("height") - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    var x = d3.scaleLinear()
-        .rangeRound([0, width]);
-
-    var y = d3.scaleLinear()
-        .rangeRound([height, 0]);
-
-    var line = d3.line()
-        .x(function (d) { return x(d.year); })
-        .y(function (d) { return y(d.totalprod); });
+    var { width, height, g, svg } = setup_svg();
 
     d3.csv("honeyproduction.csv", function (db) {
         var state_data = parse_state_data(db)
@@ -240,52 +136,120 @@ function display_totalprod() {
 
         data = state_data["ND"]
 
-        x.domain(d3.extent(db, function (d) {
-            return d.year;
-        }));
+        var { x_scale, y_scale, color_scale } = setup_scale(width, height, db, y_axis_field);
 
-        // todo: the domain range is incorrect
-        var range = d3.extent(data, function (d) { return d.totalprod; })
-        range[0] = 0
-        console.log(range)
-        y.domain(range);
+        var line = d3.line()
+            .x(function (d) { return x_scale(d.year); })
+            .y(function (d) { return y_scale(d[y_axis_field]); });
 
-        g.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x))
-            .select(".domain")
-            .text("Year")
-            .remove();
-
-        g.append("g")
-            .call(d3.axisLeft(y))
-            .append("text")
-            .attr("fill", "#000")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", "0.71em")
-            .attr("text-anchor", "end")
-            .text("Total productions (lbs)");
+        display_axis(g, height, x_scale, y_scale);
 
         // get the list of states by totalprod
-        var keys = Object.keys(sorted_state_totalprod);
-        var sorted_state_name_totalprod = keys.map(function (v) { return sorted_state_totalprod[v]; });
+        var { filtered_state_name, i } = get_filtered_state();
 
-        var color_idx = 0
-        // plot bottom two states by totalprod
-        for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
-            var state_name = sorted_state_name_totalprod[i]
-            draw_totalprod_line_chart(g, state_data[state_name],
-                line, x, y, colors[state_name], state_name)
+        color_scale.domain(filtered_state_name)
+
+        // plot bottom two & top seven states states by totalprod
+        for (var i = 0; i < filtered_state_name.length; i++) {
+            var state_name = filtered_state_name[i]
+            draw_line_chart(g, state_data[state_name],
+                line, x_scale, y_scale, color_scale(state_name), y_axis_field)
         }
 
-        // plot top seven states by totalprod
-        // todo: unknown entry at the end
-        for (var i = 1; i <= num_top_state_by_totalprod; i++) {
-            state_name = sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i]
-            draw_totalprod_line_chart(g, state_data[state_name], 
-                line, x, y, colors[state_name], state_name)
-        }
+        display_legend(svg, color_scale, width, height);
     }
     )
 }
+
+function get_filter_info() {
+    num_top_state_by_totalprod = 7;
+    num_bottom_state_by_totalprod = 2;
+}
+
+function setup_scale(width, height, db, field) {
+    var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
+    var x_scale = d3.scaleLinear()
+        .rangeRound([0, width]);
+    var y_scale = d3.scaleLinear()
+        .rangeRound([height, 0]);
+    x_scale.domain(d3.extent(db, function (d) {
+        return d.year;
+    }));
+    
+    // todo: the domain range is incorrect
+    var range = d3.extent(data, function (d) { return d[field]; });
+    range[0] = 0;
+    y_scale.domain(range);
+    return { x_scale, y_scale, color_scale };
+}
+
+function get_filtered_state() {
+    var keys = Object.keys(sorted_state_totalprod);
+    var sorted_state_name_totalprod = keys.map(function (v) { return sorted_state_totalprod[v]; });
+    var filtered_state_name = [];
+    for (var i = 0; i < num_bottom_state_by_totalprod; i++) {
+        filtered_state_name.push(sorted_state_name_totalprod[i]);
+    }
+    // todo: unknown entry at the end
+    for (var i = 1; i <= num_top_state_by_totalprod; i++) {
+        filtered_state_name.push(sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i]);
+    }
+    return { filtered_state_name, i };
+}
+
+function setup_svg() {
+    var svg = d3.select("svg"), margin = {
+        top: 150, right: 80,
+        bottom: 30, left: 100
+    },
+        width = svg.attr("width") - margin.left - margin.right,
+        height = svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    return { width, height, g, svg };
+}
+
+function display_axis(g, height, x_scale, y_scale) {
+    g.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x_scale))
+        .select(".domain")
+        .text("Year")
+        .remove();
+    g.append("g")
+        .call(d3.axisLeft(y_scale))
+        .append("text")
+        .attr("fill", "#000")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .text("Avg. price per lb");
+}
+
+function display_legend(svg, color_scale, width, height) {
+    var legendRectSize = 18;
+    var legendSpacing = 4;
+    var legend = svg.selectAll('.legend')
+        .data(color_scale.domain())
+        .enter()
+        .append('g')
+        .attr('class', 'legend')
+        .attr('transform', function (d, i) {
+            var legend_height = legendRectSize + legendSpacing;
+            var offset = legend_height * color_scale.length / 2;
+            var horz = width + 125;
+            var vert = height / 2 + i * legend_height - offset;
+            return 'translate(' + horz + ',' + vert + ')';
+        });
+    legend.append('rect')
+        .attr('width', legendRectSize)
+        .attr('height', legendRectSize)
+        .style('fill', color_scale)
+        .style('stroke', color_scale);
+    legend.append('text')
+        .attr('x', legendRectSize + legendSpacing)
+        .attr('y', legendRectSize - legendSpacing)
+        .text(function (d) { return d; });
+}
+
