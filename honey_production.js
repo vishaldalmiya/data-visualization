@@ -89,10 +89,6 @@ function display_chart(field_x, field_y, x_label, y_label) {
 
     d3.csv("honeyproduction.csv", function (db) {
         db.forEach(function (d) {
-            console.log(d[field_x])
-            console.log(+d[field_x])
-            console.log(d[field_y])
-            console.log(+d[field_y])
             d[field_x] = +d[field_x];
             d[field_y] = +d[field_y];
         });
@@ -117,27 +113,26 @@ function display_chart(field_x, field_y, x_label, y_label) {
         // plot bottom two & top seven states states by totalprod
         for (var i = 0; i < filtered_state_name.length; i++) {
             var state_name = filtered_state_name[i]
+            add_tooltip(g, state_data[state_name], x_scale, field_x, y_scale, field_y);
             draw_line_chart(g, state_data[state_name],
                 line, x_scale, y_scale, color_scale(state_name), field_x, field_y)
         }
 
         display_legend(svg, color_scale, width, height);
-
-        // Define the div for the tooltip
-        var div = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
-            
-        add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y, div);
     }
     )
 }
 
-function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y, div) {
+function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
+    // Define the div for the tooltip
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
     g.selectAll("dot")
-        .data(state_data["CO"])
+        .data(state_data)
         .enter().append("circle")
-        .attr("r", 1.5)
+        .attr("r", 2.5)
         .attr("cx", function (d) { return x_scale(d[field_x]); })
         .attr("cy", function (d) { return y_scale(d[field_y]); })
         .on("mouseover", function (d) {
