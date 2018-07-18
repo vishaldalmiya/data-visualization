@@ -91,6 +91,7 @@ function display_chart(field_x, field_y, x_label, y_label) {
         db.forEach(function (d) {
             d[field_x] = +d[field_x];
             d[field_y] = +d[field_y];
+            d['totalprod'] = +d['totalprod']
         });
 
         var state_data = parse_state_data(db)
