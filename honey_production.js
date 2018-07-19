@@ -52,7 +52,7 @@ function navigate() {
     var element = document.getElementById("navigator");
     switch (element.innerText) {
         case "Overview":
-            display_overview()
+            location.href = "overview.html"
             element.innerText = "Next (totalprod)";
             break;
         case "Next (totalprod)":
@@ -63,22 +63,6 @@ function navigate() {
             location.href = "priceperlb.html"
             break;
     }
-}
-
-function display_overview() {
-    var svg = d3.select("svg"),
-        margin = { top: 150, right: 80, bottom: 30, left: 100 },
-        width = svg.attr("width") - margin.left - margin.right,
-        height = svg.attr("height") - margin.top - margin.bottom,
-        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    g.append('text')
-        .attr('class', 'barsEndlineText')
-        .attr('text-anchor', 'middle')
-        .attr("x", width / 2)
-        .attr("y", height / 2)
-        .text("Overview: The following data set (source @ https://www.kaggle.com/jessicali9530/honey-production) consists of honey production supply and demand in US per state between years 1998 to 2012. In the year 2006 there was decline in the yield due to the loss of large number of hives resulting out of a phenomenon called Colony Collapse Disorder where disappearing workers bees cause the remaining hive colony to collapse. It was speculated that the hive diseases and pesticides were the root cause for this. 12 years post the incidence although there is recovery in the honey bees and their colonies, the US honey industry is mostly struggling. US which used to produce over half the honey consumed per year largely depends on honey imports to meet its demands now. The data is coming from National Agricultural Statistics Service (NASS). Some data cleaning was performed to get the final data used for the analysis. ")
-
 }
 
 function display_chart(field_x, field_y, x_label, y_label) {

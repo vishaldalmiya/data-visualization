@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<style>
+    body {
+        background-color: #F1F3F3
+    }
+
+    .axis {
+        font: 10px sans-serif;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #D4D8DA;
+        stroke-width: 2px;
+        shape-rendering: crispEdges;
+    }
+
+    .line {
+        fill: none;
+        stroke: #6F257F;
+        stroke-width: 5px;
+    }
+
+    .overlay {
+        fill: none;
+        pointer-events: all;
+    }
+
+    .focus circle {
+        fill: #F1F3F3;
+        stroke: #6F257F;
+        stroke-width: 5px;
+    }
+
+    .hover-line {
+        stroke: #6F257F;
+        stroke-width: 2px;
+        stroke-dasharray: 3, 3;
+    }
+</style>
+
+<head>
+    <title>Honey Production in US</title>
+    <script src="http://d3js.org/d3.v4.min.js"> </script>
+    <script src="honey_production.js"></script>
+</head>
+
+<body>
+    <h1>Honey Production in US</h1>
+
+    <p>
+        <strong>Question:</strong>
+    </p>
+
+    <p>1. Over the years 1998 to 2012 which states produced the highest and least honey? </p>
+
+    <p>2. Was there any impact on the honey production in US post 2006 due to “Colony Collapse Disorder” in 2006? </p>
+
+    <p>
+        <strong>Overview: </strong>The following data set @
+        <a href="https://www.kaggle.com/jessicali9530/honey-production/" target="_blank">Honey production</a> consists of honey production supply and demand in US per state between years 1998 to 2012. In
+        the year 2006 there was decline in the yield due to the loss of large number of hives resulting out of a phenomenon
+        called "Colony Collapse Disorder" where disappearing workers bees cause the remaining hive colony to collapse. It
+        was speculated that the hive diseases and pesticides were the root cause for this. 12 years post the incidence although
+        there is recovery in the honey bees and their colonies, the US honey industry is mostly struggling. US which used
+        to produce over half the honey consumed per year largely depends on honey imports to meet its demands now. The data
+        is coming from National Agricultural Statistics Service (NASS). Some data cleaning was performed to get the final
+        data used for the analysis. </p>
+
+    <p>
+        <strong>Visualization: </strong>Tableau was used for the visualization. The data set consists of all states of US. These
+        are the following charts that are plotted to answer the above questions. For plots 2 &amp; 3, only the top 7 &amp;
+        bottom 2 states based on total production are chosen else the charts were very crowded: </p>
+
+    <p>1. Total production: To show the states with the highest and lowest honey production from 1998-2012, a map has been used
+        which provides an overview as to the relative honey production among the different states in US. The saturation as
+        been used to identify the highest (ND) &amp; lowest (SC) honey production states (cumulative of 1998-2012) &amp;
+        these two states have been labeled with the total production. Details for the other states will show up in tooltip.
+    </p>
+
+    <p>2. Total production trend: The X axis represents the year (independent variable) and the Y axis represents the total
+        production of honey (dependent variable) per year in lbs. Line chart with different colors represent the total production
+        per state. A line chart was chosen here since year is a continuous variable. Different colors were added to different
+        state since it’s a nominal data. An annotation has been added to year 2006 when the “Colony Collapse Disorder” happened
+        so that it can help visualize the trend before and after the event w.r.t. honey production. A line chart and not
+        stacked line chart was used to understand the trend better per state which helps in the inference section. </p>
+
+    <p>3. Price per lb trend: The X axis represents the year (independent variable) and the Y axis represents the price per
+        lb (dependent variable) of honey per year in lbs. Line chart with different colors represent the price per lb per
+        state. A line chart was chosen here since year is a continuous variable. Different colors were added to different
+        state since it’s a nominal data. </p>
+
+    <p>
+        <strong>Inference: </strong>
+    </p>
+
+    <p>1. From the Total production map, we can clearly see ND &amp; SC were the highest and lowest producer of honey cumulative
+        of years 1998-2012. </p>
+
+    <p>2. From the Total production trend line chart its very evident that the honey production of most of the states had a
+        trend for reduced honey production from 1998-2012 (i.e. both before &amp; after the year 2006). This implies there
+        could be another explanation to the decreased production other than the suspected “Colony Collapse Disorder” in 2006.
+        Since the imports increased one potential reason could be the cost of production which may be higher domestically
+        as compared to imports. To understand the impact of cost let’s look at the Price per lb trend line chart. It is evident
+        that there was a gradual increase in price per lb for all states from 1998-2012. So, this corroborates that cost
+        played a role in reduction of honey production. Infact one striking observation is that for states OK &amp; SC the
+        price per lb increased drastically by 2003, the same year they ceased production as well.</p>
+    <button id="navigator" onclick="navigate();">Next (totalprod)</button>
+</body>
+
+</html>
