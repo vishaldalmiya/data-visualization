@@ -52,8 +52,9 @@ function navigate() {
     var element = document.getElementById("navigator");
     switch (element.innerText) {
         case "Overview":
-            location.href = "overview.html"
-            element.innerText = "Next (totalprod)";
+            display_map()
+            // location.href = "overview.html"
+            // element.innerText = "Next (totalprod)";
             break;
         case "Next (totalprod)":
             element.innerText = "Next (priceperlb)";
@@ -63,6 +64,22 @@ function navigate() {
             location.href = "priceperlb.html"
             break;
     }
+}
+
+function display_map() {
+    var map = d3.geomap.choropleth()
+        .geofile('/d3-geomap/topojson/countries/USA.json')
+        .projection(d3.geo.albersUsa)
+        .column('2012')
+        .unitId('fips')
+        .scale(1000)
+        .legend(true);
+
+    d3.csv('honeyproduction.csv', function (error, data) {
+        d3.select('#map')
+            .datum(data)
+            .call(map.draw, map);
+    });
 }
 
 function display_chart(field_x, field_y, x_label, y_label) {
