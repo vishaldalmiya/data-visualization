@@ -52,8 +52,11 @@ function navigate() {
     var element = document.getElementById("navigator");
     switch (element.innerText) {
         case "Overview":
+            location.href = "overview.html"
+            break;
+        case "Map":
+            element.innerText = "Next (totalprod)";
             location.href = "map.html"
-            // element.innerText = "Next (totalprod)";
             break;
         case "Next (totalprod)":
             element.innerText = "Next (priceperlb)";
@@ -92,15 +95,9 @@ function display_map() {
                 min_totalprod = sum_totalprod
             }
         }
-
-        console.log(min_totalprod)
-        console.log(max_totalprod)
-        // sorted_state_totalprod = sort_state_by_totalprod_v2(state_data)
     })
 
-    var svg = d3.select("svg"),
-        width = +svg.attr("width"),
-        height = +svg.attr("height");
+    var { width, height, g, svg, margin } = setup_svg();
 
     var state_id_name = d3.map();
 
@@ -113,8 +110,6 @@ function display_map() {
         .rangeRound([600, 860]);
 
     var color = d3.scaleThreshold()
-        //.domain(d3.range(2, 10))
-        //.domain([1030000, 475085000])
         .range(d3.schemeBlues[9]);
 
     var g = svg.append("g")
@@ -161,7 +156,7 @@ function display_map() {
         if (error) throw error;
 
         var keys = Object.keys(sorted_state_totalprod);
-        var values = keys.map(function(v) { return sorted_state_totalprod[v]; });
+        var values = keys.map(function (v) { return sorted_state_totalprod[v]; });
 
         color.domain(values)
         svg.append("g")
@@ -170,12 +165,7 @@ function display_map() {
             .data(topojson.feature(us, us.objects.states).features)
             .enter().append("path")
             .attr("fill", function (d) {
-                console.log(d)
-                console.log(+d.id)
-                console.log(state_id_name[+d.id])
-                console.log(sorted_state_totalprod[state_id_name[+d.id]])
                 return color(sorted_state_totalprod[state_id_name[+d.id]]);
-                //return color(d.totalprod = sorted_state_totalprod[state_id_name[+d.id]]);
             })
             .attr("d", path)
             .append("title")
