@@ -52,8 +52,7 @@ function navigate() {
     var element = document.getElementById("navigator");
     switch (element.innerText) {
         case "Overview":
-            display_map()
-            // location.href = "overview.html"
+            location.href = "map.html"
             // element.innerText = "Next (totalprod)";
             break;
         case "Next (totalprod)":
@@ -67,19 +66,126 @@ function navigate() {
 }
 
 function display_map() {
-    var map = d3.geomap.choropleth()
-        .geofile('/d3-geomap/topojson/countries/USA.json')
-        .projection(d3.geo.albersUsa)
-        .column('2012')
-        .unitId('fips')
-        .scale(1000)
-        .legend(true);
+    var sorted_state_totalprod = {},
+        max_totalprod = 0,
+        min_totalprod = Infinity
 
-    d3.csv('honeyproduction.csv', function (error, data) {
-        d3.select('#map')
-            .datum(data)
-            .call(map.draw, map);
-    });
+    d3.csv("honeyproduction.csv", function (db) {
+        db.forEach(function (d) {
+            d['totalprod'] = +d['totalprod']
+        });
+
+        var state_db = parse_state_data(db)
+
+        for (state in state_db) {
+            sum_totalprod = 0
+            for (idx in state_db[state]) {
+                sum_totalprod += state_db[state][idx].totalprod
+            }
+            sorted_state_totalprod[state] = sum_totalprod
+
+            if (sum_totalprod > max_totalprod) {
+                max_totalprod = sum_totalprod
+            }
+
+            if (sum_totalprod < min_totalprod) {
+                min_totalprod = sum_totalprod
+            }
+        }
+
+        console.log(min_totalprod)
+        console.log(max_totalprod)
+        // sorted_state_totalprod = sort_state_by_totalprod_v2(state_data)
+    })
+
+    var svg = d3.select("svg"),
+        width = +svg.attr("width"),
+        height = +svg.attr("height");
+
+    var state_id_name = d3.map();
+
+    var path = d3.geoPath();
+
+    console.log(d3.range(2, 10))
+
+    var x = d3.scaleLinear()
+        .domain([1, 10])
+        .rangeRound([600, 860]);
+
+    var color = d3.scaleThreshold()
+        //.domain(d3.range(2, 10))
+        //.domain([1030000, 475085000])
+        .range(d3.schemeBlues[9]);
+
+    var g = svg.append("g")
+        .attr("class", "key")
+        .attr("transform", "translate(0,40)");
+
+    // g.selectAll("rect")
+    //     .data(color.range().map(function (d) {
+    //         d = color.invertExtent(d);
+    //         if (d[0] == null) d[0] = x.domain()[0];
+    //         if (d[1] == null) d[1] = x.domain()[1];
+    //         return d;
+    //     }))
+    //     .enter().append("rect")
+    //     .attr("height", 8)
+    //     .attr("x", function (d) { return x(d[0]); })
+    //     .attr("width", function (d) { return x(d[1]) - x(d[0]); })
+    //     .attr("fill", function (d) { return color(d[0]); });
+
+    // g.append("text")
+    //     .attr("class", "caption")
+    //     .attr("x", x.range()[0])
+    //     .attr("y", -6)
+    //     .attr("fill", "#000")
+    //     .attr("text-anchor", "start")
+    //     .attr("font-weight", "bold")
+    //     .text("Unemployment rate");
+
+    // g.call(d3.axisBottom(x)
+    //     .tickSize(13)
+    //     .tickFormat(function (x, i) { return i ? x : x + "%"; })
+    //     .tickValues(color.domain()))
+    //     .select(".domain")
+    //     .remove();
+
+    d3.queue()
+        .defer(d3.json, "https://d3js.org/us-10m.v1.json")
+        .defer(d3.tsv, "us-state-names.tsv", function (d) {
+            state_id_name[d.id] = d.code;
+        })
+        .await(ready);
+
+    function ready(error, us) {
+        if (error) throw error;
+
+        var keys = Object.keys(sorted_state_totalprod);
+        var values = keys.map(function(v) { return sorted_state_totalprod[v]; });
+
+        color.domain(values)
+        svg.append("g")
+            .attr("class", "states")
+            .selectAll("path")
+            .data(topojson.feature(us, us.objects.states).features)
+            .enter().append("path")
+            .attr("fill", function (d) {
+                console.log(d)
+                console.log(+d.id)
+                console.log(state_id_name[+d.id])
+                console.log(sorted_state_totalprod[state_id_name[+d.id]])
+                return color(sorted_state_totalprod[state_id_name[+d.id]]);
+                //return color(d.totalprod = sorted_state_totalprod[state_id_name[+d.id]]);
+            })
+            .attr("d", path)
+            .append("title")
+            .text(function (d) { return d.rate + "%"; });
+
+        svg.append("path")
+            .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
+            .attr("class", "states")
+            .attr("d", path);
+    }
 }
 
 function display_chart(field_x, field_y, x_label, y_label) {
