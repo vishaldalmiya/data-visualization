@@ -48,26 +48,6 @@ function draw_line_chart(g, data, line, x_scale, y_scale, color, field_x, field_
         .attr("y", y_scale(data[data.length - 1][field_y]))
 }
 
-function navigate() {
-    var element = document.getElementById("navigator");
-    switch (element.innerText) {
-        case "Overview":
-            location.href = "overview.html"
-            break;
-        case "Map":
-            element.innerText = "Next (totalprod)";
-            location.href = "map.html"
-            break;
-        case "Next (totalprod)":
-            element.innerText = "Next (priceperlb)";
-            location.href = "totalprod.html"
-            break;
-        case "Next (priceperlb)":
-            location.href = "priceperlb.html"
-            break;
-    }
-}
-
 function display_map() {
     var sorted_state_totalprod = {},
         max_totalprod = 0,
