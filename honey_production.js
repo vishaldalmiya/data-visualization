@@ -197,8 +197,47 @@ function display_chart(field_x, field_y, x_label, y_label) {
         }
 
         display_legend(svg, color_scale, width, height);
+
+        const type = d3.annotationLabel
+
+        const annotations = [{
+            note: {
+                label: "Year 2006 marked as year of colony disorder",
+                bgPadding: 20,
+                title: ""
+            },
+            //can use x, y directly instead of data
+            data: { year: "2006", totalprod: 464101000 },
+            className: "show-bg",
+            dy: 137,
+            dx: 162
+        }]
+    
+        const makeAnnotations = d3.annotation()
+            .editMode(true)
+            //also can set and override in the note.padding property
+            //of the annotation object
+            .notePadding(15)
+            .type(type)
+            //accessors & accessorsInverse not needed
+            //if using x, y in annotations JSON
+            .accessors({
+                x: d => x_scale(d.year),
+                y: d => y_scale(d.to)
+            })
+            // .accessorsInverse({
+            //     date: d => timeFormat(x.invert(d.x)),
+            //     close: d => y.invert(d.y)
+            // })
+            .annotations(annotations)
+    
+        g.append('g')
+            .attr("class", "annotation-group")
+            .call(makeAnnotations)
     }
     )
+
+
 }
 
 function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
