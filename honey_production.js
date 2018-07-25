@@ -198,46 +198,42 @@ function display_chart(field_x, field_y, x_label, y_label) {
 
         display_legend(svg, color_scale, width, height);
 
-        const type = d3.annotationLabel
-
         const annotations = [{
-            note: {
-                label: "Year 2006 marked as year of colony disorder",
-                bgPadding: 20,
-                title: ""
+            note: { label: "Year 2006: Marked as year of Colony Collapse Disorder" },
+            subject: {
+                y1: margin.top,
+                y2: height - margin.bottom
             },
-            //can use x, y directly instead of data
-            data: { year: "2006", totalprod: 464101000 },
-            className: "show-bg",
-            dy: 137,
-            dx: 162
+            y: margin.top - 100,
+            data: { x: 2006 } //position the x based on an x scale
         }]
-    
+
+        const type = d3.annotationCustomType(
+            d3.annotationXYThreshold,
+            {
+                "note": {
+                    "lineType": "none",
+                    "orientation": "top",
+                    "align": "middle"
+                }
+            }
+        )
+
         const makeAnnotations = d3.annotation()
-            .editMode(true)
-            //also can set and override in the note.padding property
-            //of the annotation object
-            .notePadding(15)
             .type(type)
-            //accessors & accessorsInverse not needed
-            //if using x, y in annotations JSON
+            //Gives you access to any data objects in the annotations array
             .accessors({
-                x: d => x_scale(d.year),
-                y: d => y_scale(d.to)
+                x: function (d) { return x_scale(d.x) },
+                y: function (d) { return y_scale(d.y) }
             })
-            // .accessorsInverse({
-            //     date: d => timeFormat(x.invert(d.x)),
-            //     close: d => y.invert(d.y)
-            // })
             .annotations(annotations)
-    
-        g.append('g')
+            .textWrap(200)
+
+        g.append("g")
             .attr("class", "annotation-group")
             .call(makeAnnotations)
     }
     )
-
-
 }
 
 function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
