@@ -83,8 +83,6 @@ function display_map() {
 
     var path = d3.geoPath();
 
-    console.log(d3.range(2, 10))
-
     var x = d3.scaleLinear()
         .domain([1, 10])
         .rangeRound([600, 860]);
@@ -116,7 +114,7 @@ function display_map() {
     //     .attr("fill", "#000")
     //     .attr("text-anchor", "start")
     //     .attr("font-weight", "bold")
-    //     .text("Unemployment rate");
+    //     .text("Total production of Honey");
 
     // g.call(d3.axisBottom(x)
     //     .tickSize(13)
@@ -149,7 +147,9 @@ function display_map() {
             })
             .attr("d", path)
             .append("title")
-            .text(function (d) { return d.rate + "%"; });
+            .text(function (d) { 
+                console.log(sorted_state_totalprod[state_id_name[+d.id]])
+                return state_id_name[+d.id] + ": " + sorted_state_totalprod[state_id_name[+d.id]]; });
 
         svg.append("path")
             .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
