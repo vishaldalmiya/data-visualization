@@ -9,6 +9,15 @@ function parse_state_data(data) {
     return state_db
 }
 
+// todo - d3.transition()
+// todo - add annotations
+// todo - check the criterias mentioned by Dr. Hart
+// todo - fix the text for price per lb
+// todo - try to add name and total production for lowest and highest
+// todo - add in map info its cummulative from ..-.. years
+// todo - add the about page 
+// todo - remove comma from the year
+
 function get_sorted_hash(inputHash) {
     var resultHash = {};
 
@@ -40,12 +49,6 @@ function draw_line_chart(g, data, line, x_scale, y_scale, color, field_x, field_
         .attr("stroke", color)
         .attr("stroke-width", 2.0)
         .attr("d", line)
-
-    g.append('text')
-        .attr('class', 'barsEndlineText')
-        .attr('text-anchor', 'middle')
-        .attr("x", x_scale(data[data.length - 1][field_x]))
-        .attr("y", y_scale(data[data.length - 1][field_y]))
 }
 
 function display_map() {
@@ -147,9 +150,10 @@ function display_map() {
             })
             .attr("d", path)
             .append("title")
-            .text(function (d) { 
+            .text(function (d) {
                 console.log(sorted_state_totalprod[state_id_name[+d.id]])
-                return state_id_name[+d.id] + ": " + sorted_state_totalprod[state_id_name[+d.id]]; });
+                return state_id_name[+d.id] + ": " + sorted_state_totalprod[state_id_name[+d.id]];
+            });
 
         svg.append("path")
             .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
@@ -197,41 +201,21 @@ function display_chart(field_x, field_y, x_label, y_label) {
         }
 
         display_legend(svg, color_scale, width, height);
+        
+        g.append('text')
+            .attr('class', 'barsEndlineText')
+            .attr('text-anchor', 'middle')
+            .attr("x", x_scale(2006))
+            .attr("y", y_scale(46410000))
+            .text("Year: 2006 marked as year of Colony Collapse Disorder ")
 
-        const annotations = [{
-            note: { label: "Year 2006: Marked as year of Colony Collapse Disorder" },
-            subject: {
-                y1: margin.top,
-                y2: height - margin.bottom
-            },
-            y: margin.top - 100,
-            data: { x: 2006 } //position the x based on an x scale
-        }]
-
-        const type = d3.annotationCustomType(
-            d3.annotationXYThreshold,
-            {
-                "note": {
-                    "lineType": "none",
-                    "orientation": "top",
-                    "align": "middle"
-                }
-            }
-        )
-
-        const makeAnnotations = d3.annotation()
-            .type(type)
-            //Gives you access to any data objects in the annotations array
-            .accessors({
-                x: function (d) { return x_scale(d.x) },
-                y: function (d) { return y_scale(d.y) }
-            })
-            .annotations(annotations)
-            .textWrap(200)
-
-        g.append("g")
-            .attr("class", "annotation-group")
-            .call(makeAnnotations)
+        g.append("line")          // attach a line
+            .style("stroke", "black")  // colour the line
+            .style("stroke-dasharray", ("2, 2"))
+            .attr("x1", x_scale(2006))     // x position of the first end of the line
+            .attr("y1", y_scale(46410000))      // y position of the first end of the line
+            .attr("x2", x_scale(2006))     // x position of the second end of the line
+            .attr("y2", y_scale(0));    // y position of the second end of the line
     }
     )
 }
