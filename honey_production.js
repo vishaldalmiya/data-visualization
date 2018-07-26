@@ -201,23 +201,38 @@ function display_chart(field_x, field_y, x_label, y_label) {
         }
 
         display_legend(svg, color_scale, width, height);
-        
-        g.append('text')
-            .attr('class', 'barsEndlineText')
-            .attr('text-anchor', 'middle')
-            .attr("x", x_scale(2006))
-            .attr("y", y_scale(46410000))
-            .text("Year: 2006 marked as year of Colony Collapse Disorder ")
 
-        g.append("line")          // attach a line
-            .style("stroke", "black")  // colour the line
-            .style("stroke-dasharray", ("2, 2"))
-            .attr("x1", x_scale(2006))     // x position of the first end of the line
-            .attr("y1", y_scale(46410000))      // y position of the first end of the line
-            .attr("x2", x_scale(2006))     // x position of the second end of the line
-            .attr("y2", y_scale(0));    // y position of the second end of the line
+        // adding annotations
+        add_annotation(field_y, g, x_scale, y_scale);
     }
     )
+}
+
+function add_annotation(field_y, g, x_scale, y_scale) {
+    var x_data, y_data, text;
+    if (field_y == "totalprod") {
+        x_data = 2006;
+        y_data = 46410000;
+        text = "Year: 2006 marked as year of Colony Collapse Disorder ";
+    }
+    else {
+        x_data = 2003;
+        y_data = 2.5;
+        text = "Year: 2003 OK & OC ceased production ";
+    }
+    g.append('text')
+        .attr('class', 'barsEndlineText')
+        .attr('text-anchor', 'middle')
+        .attr("x", x_scale(x_data))
+        .attr("y", y_scale(y_data))
+        .text(text);
+    g.append("line")
+        .style("stroke", "black")
+        .style("stroke-dasharray", ("2, 2"))
+        .attr("x1", x_scale(x_data))
+        .attr("y1", y_scale(y_data))
+        .attr("x2", x_scale(x_data))
+        .attr("y2", y_scale(0));
 }
 
 function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
