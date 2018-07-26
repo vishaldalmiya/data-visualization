@@ -10,90 +10,55 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        .topnav {
-            overflow: hidden;
-            background-color: #333;
-        }
-
-        .topnav a {
-            float: left;
-            display: block;
-            color: #f2f2f2;
-            text-align: center;
-            padding: 14px 16px;
+        a {
             text-decoration: none;
-            font-size: 17px;
+            display: inline-block;
+            padding: 8px 16px;
         }
 
-        .topnav a:hover {
+        a:hover {
             background-color: #ddd;
             color: black;
         }
 
-        .active {
+        .previous {
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+        .next {
             background-color: #4CAF50;
             color: white;
         }
 
-        .topnav .icon {
-            display: none;
-        }
-
-        @media screen and (max-width: 600px) {
-            .topnav a:not(:first-child) {
-                display: none;
-            }
-            .topnav a.icon {
-                float: right;
-                display: block;
-            }
-        }
-
-        @media screen and (max-width: 600px) {
-            .topnav.responsive {
-                position: relative;
-            }
-            .topnav.responsive .icon {
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-            .topnav.responsive a {
-                float: none;
-                display: block;
-                text-align: left;
-            }
+        .round {
+            border-radius: 50%;
         }
     </style>
 </head>
 
 <body>
-
-    <div class="topnav" id="myTopnav">
-        <a href="#overview" class="active" onclick="overview()">Overview</a>
-        <a href="#map" onclick="map()">Map</a>
-        <a href="#totalprod" onclick="totalprod()">Total Prod</a>
-        <a href="#priceperlb" onclick="priceperlb()">Price per lb</a>
-    </div>
-
     <div style="padding-left:16px">
         <h2>Honey production in US</h2>
     </div>
 
+    <a href="#" class="previous">&laquo; Previous</a>
+    <a href="#" onclick="map()" id="next" class="next">Next &raquo;</a>
+
     <p>
         <strong>Overview: </strong>The following data set @
-        <a href="https://www.kaggle.com/jessicali9530/honey-production/" target="_blank">Honey production</a> consists of honey production supply and demand in US per state between years 1998 to 2012. In
-        the year 2006 there was decline in the yield due to the loss of large number of hives resulting out of a phenomenon
-        called "Colony Collapse Disorder" where disappearing workers bees cause the remaining hive colony to collapse. It
-        was speculated that the hive diseases and pesticides were the root cause for this. 12 years post the incidence although
-        there is recovery in the honey bees and their colonies, the US honey industry is mostly struggling. US which used
-        to produce over half the honey consumed per year largely depends on honey imports to meet its demands now. The data
-        is coming from National Agricultural Statistics Service (NASS). Some data cleaning was performed to get the final
-        data used for the analysis.
+        <a href="https://www.kaggle.com/jessicali9530/honey-production/" target="_blank">Honey production</a>
+        consists of honey production supply and demand in US per state between years 1998 to 2012. In the year 2006 there was decline
+        in the yield due to the loss of large number of hives resulting out of a phenomenon called "Colony Collapse Disorder"
+        where disappearing workers bees cause the remaining hive colony to collapse. It was speculated that the hive diseases
+        and pesticides were the root cause for this. 12 years post the incidence although there is recovery in the honey
+        bees and their colonies, the US honey industry is mostly struggling. US which used to produce over half the honey
+        consumed per year largely depends on honey imports to meet its demands now. The data is coming from National Agricultural
+        Statistics Service (NASS). Some data cleaning was performed to get the final data used for the analysis.
     </p>
 
     <p>
-        <strong>The following questions are investigated in the following slides:</strong> 
+        <strong>The following questions are investigated in the following slides:</strong>
     </p>
 
     <p>1. Over the years 1998 to 2012 which states produced the highest and least honey? </p>
