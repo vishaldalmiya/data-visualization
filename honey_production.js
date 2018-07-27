@@ -17,6 +17,8 @@ function parse_state_data(data) {
 // todo - add in map info its cummulative from ..-.. years
 // todo - add the about page 
 // todo - remove comma from the year
+// todo - clean up the tooltip
+// todo - disable prev & next
 
 function get_sorted_hash(inputHash) {
     var resultHash = {};
@@ -97,6 +99,7 @@ function display_map() {
         .attr("class", "key")
         .attr("transform", "translate(0,40)");
 
+    // todo: remove if not required
     // g.selectAll("rect")
     //     .data(color.range().map(function (d) {
     //         d = color.invertExtent(d);
@@ -305,7 +308,7 @@ function get_filtered_state() {
 
 function setup_svg() {
     var svg = d3.select("svg"), margin = {
-        top: 150, right: 80,
+        top: 20, right: 80,
         bottom: 30, left: 100
     },
         width = svg.attr("width") - margin.left - margin.right,
