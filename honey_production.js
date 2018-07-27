@@ -193,7 +193,7 @@ function display_chart(field_x, field_y, x_label, y_label) {
 
     d3.csv("honeyproduction.csv", function (db) {
         db.forEach(function (d) {
-            d[field_x] = +d[field_x];
+            d[field_x] = new Date(d[field_x], 0, 0);
             d[field_y] = +d[field_y];
             d['totalprod'] = +d['totalprod']
         });
@@ -234,12 +234,12 @@ function display_chart(field_x, field_y, x_label, y_label) {
 function add_annotation(field_y, g, x_scale, y_scale) {
     var x_data, y_data, text;
     if (field_y == "totalprod") {
-        x_data = 2006;
+        x_data = new Date(2006, 0, 0);
         y_data = 46410000;
         text = "Year: 2006 marked as year of Colony Collapse Disorder ";
     }
     else {
-        x_data = 2003;
+        x_data = new Date(2003, 0, 0);
         y_data = 2.5;
         text = "Year: 2003 OK & OC ceased production ";
     }
@@ -298,7 +298,7 @@ function get_filter_info() {
 function setup_scale(width, height, db, field_x, field_y) {
     var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
     // todo: check on this
-    var x_scale = d3.scaleLinear()
+    var x_scale = d3.scaleTime()
         .range([0, width]);
     var y_scale = d3.scaleLinear()
         .rangeRound([height, 0]);
