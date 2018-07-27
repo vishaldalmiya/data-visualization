@@ -9,14 +9,16 @@ function parse_state_data(data) {
     return state_db
 }
 
-// todo - d3.transition()
-// todo - add annotations
-// todo - check the criterias mentioned by Dr. Hart
-// todo - fix the text for price per lb
 // todo - try to add name and total production for lowest and highest
+// todo - d3.transition()
+// todo - check the criterias mentioned by Dr. Hart
 // todo - add in map info its cummulative from ..-.. years
-// todo - add the about page 
 // todo - remove comma from the year
+
+
+// todo - add annotations
+// todo - fix the text for price per lb
+// todo - add the about page 
 // todo - clean up the tooltip
 // todo - disable prev & next
 
@@ -154,14 +156,33 @@ function display_map() {
             .attr("d", path)
             .append("title")
             .text(function (d) {
-                console.log(sorted_state_totalprod[state_id_name[+d.id]])
                 return state_id_name[+d.id] + ": " + sorted_state_totalprod[state_id_name[+d.id]];
             });
 
-        svg.append("path")
-            .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
-            .attr("class", "states")
-            .attr("d", path);
+        svg.selectAll("text")
+            .data(topojson.feature(us, us.objects.states).features)
+            .enter()
+            .append("svg:text")
+            .text(function (d) {
+                if (state_id_name[+d.id] == "ND" || state_id_name[+d.id] == "SC") {
+                    return state_id_name[+d.id] + ": " + sorted_state_totalprod[state_id_name[+d.id]];
+                }
+                else {
+                    return state_id_name[+d.id]
+                }
+            })
+            .attr("x", function (d) {
+                return path.centroid(d)[0];
+            })
+            .attr("y", function (d) {
+                return path.centroid(d)[1];
+            })
+            .attr("text-anchor", "middle")
+            .attr('font-size', '6pt');
+        // svg.append("path")
+        //     .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
+        //     .attr("class", "states")
+        //     .attr("d", path);
     }
 }
 
