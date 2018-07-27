@@ -247,7 +247,9 @@ function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
     g.selectAll("dot")
         .data(state_data)
         .enter().append("circle")
-        .attr("r", 2.5)
+        .attr("fill", "#F1F3F3")
+        .attr('fill-opacity', 0)
+        .attr("r", 5)
         .attr("cx", function (d) { return x_scale(d[field_x]); })
         .attr("cy", function (d) { return y_scale(d[field_y]); })
         .on("mouseover", function (d) {
