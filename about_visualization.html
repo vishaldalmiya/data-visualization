@@ -50,73 +50,80 @@
 
     <small>
         <p>I have used interactive slideshow as the medium for the narrative visualization for dataset related to
-            <b>“Honey Production in US”. </b>
+            <b>"Honey Production in US". </b>
         </p>
+        <p>
+            <ul>
+                <li>
+                    <b>Scenes</b>: Same template has been used across all scenes (e.g. similar formatting, fonts, svg size,
+                    etc). Also, D3 transitions have been deployed to make the transition smooth between scenes. There are
+                    namely 4 scenes used for the interactive slide show:</li>
+                <ul>
+                    <li>
+                        <b>Overview: </b>This scene provides an overview of what the dataset is, where it is obtained from and
+                        what questions will be answered as part of this narrative visualization.</li>
+                    <li>
+                        <b>Total production:</b> This scene represented the cumulative honey production per state from year
+                        1998-2012 to help identify the highest and lowest honey production states in US </li>
 
-        <p>1.
-            <b>Scenes</b>: There are namely 4 scenes used for the interactive slide show:</p>
+                    <li>
+                        <b>Total production trend:</b> This scene shows the total honey production trend across states for years
+                        1998-2012
+                    </li>
 
-        <p>a.
-            <b>Overview: </b>This scene provides an overview of what the dataset is, where it is obtained from and what questions
-            will be answered as part of this narrative visualization.</p>
+                    <li>
+                        <b>Price per lb trend:</b> This scene shows the price per lb trend across states for years 1998-2012.</li>
+                </ul>
+                <li>
+                    <b>Annotations: </b>Following are the annotations that were added to therelevant slides:</li>
+                <ul>
+                    <li>
+                        <b>Total production trend</b>: An annotation was added to the year 2006. This was to help the reader
+                        to demarcate the trend in total production of honey before and after the year 2006 (the year of Colony
+                        Collapse Disorder).
+                    </li>
 
-        <p>b.
-            <b>Total production:</b> This scene represented the cumulative honey production per state from year 1998-2012 to
-            help identify the highest and lowest honey production states in US </p>
+                    <li>
+                        <b>Price per lb trend: </b>When the scene transitioned from to Total production trend to Price per lb
+                        trend, the previous annotation was cleared and a new one was added for the year 2003 to emphasize
+                        to the readers that for states OK &amp; SC the price per lb increased drastically by 2003, the same
+                        year they ceased production as well. This was done to show that price could have played a role in
+                        the reduction in honey production post 2006.</li>
+                </ul>
+                <li>
+                    <b>Parameters:</b>
+                </li>
+                <ul>
+                    <li>
+                        <b>Total production:</b> To show the states with the highest and lowest honey production from 1998-2012,
+                        a map has been used which provides an overview as to the relative honey production among the different
+                        states in US. The saturation has been used to identify the highest (ND) &amp; lowest (SC) honey production
+                        states (cumulative of 1998-2012) &amp; these two states have been labeled with the total production.
+                        Details for the other states will show up in tooltip.
+                    </li>
 
-        <p>c.
-            <b>Total production trend:</b> This scene shows the total honey production trend across states for years 1998-2012</p>
+                    <li>
+                        <b>Total production trend</b>: The X axis represents the year (independent variable) and the Y axis
+                        represents the total production of honey (dependent variable) per year in lbs. Line chart with different
+                        colors represent the total production per state. A line chart was chosen here since year is a continuous
+                        variable. Different colors were added to different state since it’s a nominal data. A line chart
+                        and not stacked line chart was used to understand the trend better per state which helps in the inference
+                        section.
+                    </li>
 
-        <p>d.
-            <b>Price per lb trend:</b> This scene shows the price per lb trend across states for years 1998-2012.</p>
-
-        <p>Same template has been used across all scenes (e.g. similar formatting, fonts, svg size …). Also, D3 transitions
-            have been deployed to make the transition smooth between scenes</p>
-
-        <p>2.
-            <b>Annotations: </b>Following are the annotations that were added to therelevant slides:</p>
-
-        <p>a.
-            <b>Total production trend</b>: An annotation was added to the year 2006. This was to help the reader to demarcate
-            the trend in total production of honey before and after the year 2006 (the year of Colony Collapse Disorder).</p>
-
-        <p>b.
-            <b>Price per lb trend: </b>When the scene transitioned from to Total production trend to Price per lb trend, the
-            previous annotation was cleared and a new one was added for the year 2003 to emphasize to the readers that for
-            states OK &amp; SC the price per lb increased drastically by 2003, the same year they ceased production as well.
-            This was done to show that price could have played a role in the reduction in honey production post 2006.</p>
-
-        <p>3.
-            <b>Parameters:</b>
+                    <li>
+                        <b>Price per lb trend:</b> The X axis represents the year (independent variable) and the Y axis represents
+                        the price per lb (dependent variable) of honey per year in lbs. Line chart with different colors
+                        represent the price per lb per state. A line chart was chosen here since year is a continuous variable.
+                        Different colors were added to different state since it’s a nominal data.</li>
+                </ul>
+                <li>
+                    <b>Triggers: </b>The main triggers were the "Next" and "Previous" buttons on every scene which enabled the
+                    user to navigate through slides. These buttons rendered new scenes with different parameters (as described
+                    in the parameters section above)
+                </li>
+            </ul>
         </p>
-
-        <p>a.
-            <b>Total production:</b> To show the states with the highest and lowest honey production from 1998-2012, a map has
-            been used which provides an overview as to the relative honey production among the different states in US. The
-            saturation has been used to identify the highest (ND) &amp; lowest (SC) honey production states (cumulative of
-            1998-2012) &amp; these two states have been labeled with the total production. Details for the other states will
-            show up in tooltip.
-        </p>
-
-        <p>b.
-            <b>Total production trend</b>: The X axis represents the year (independent variable) and the Y axis represents the
-            total production of honey (dependent variable) per year in lbs. Line chart with different colors represent the
-            total production per state. A line chart was chosen here since year is a continuous variable. Different colors
-            were added to different state since it’s a nominal data. A line chart and not stacked line chart was used to
-            understand the trend better per state which helps in the inference section.</p>
-
-        <p>c.
-            <b>Price per lb trend:</b> The X axis represents the year (independent variable) and the Y axis represents the price
-            per lb (dependent variable) of honey per year in lbs. Line chart with different colors represent the price per
-            lb per state. A line chart was chosen here since year is a continuous variable. Different colors were added to
-            different state since it’s a nominal data.</p>
-
-        <p>4.
-            <b>Triggers:</b>
-        </p>
-
-        <p>a. The main triggers were the “Next” and “Previous” buttons on every scene which enabled the user to navigate through
-            slides. These buttons rendered new scenes with different parameters (as described in the parameters section above)</p>
 
     </small>
     <script>
