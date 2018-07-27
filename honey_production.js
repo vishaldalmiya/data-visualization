@@ -197,7 +197,7 @@ function display_chart(field_x, field_y, x_label, y_label) {
         // plot bottom two & top seven states states by totalprod
         for (var i = 0; i < filtered_state_name.length; i++) {
             var state_name = filtered_state_name[i]
-            add_tooltip(g, state_data[state_name], x_scale, field_x, y_scale, field_y);
+            add_tooltip(g, state_name, state_data[state_name], x_scale, field_x, y_scale, field_y);
             draw_line_chart(g, state_data[state_name],
                 line, x_scale, y_scale, color_scale(state_name), field_x, field_y)
         }
@@ -237,7 +237,7 @@ function add_annotation(field_y, g, x_scale, y_scale) {
         .attr("y2", y_scale(0));
 }
 
-function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
+function add_tooltip(g, state_name, state_data, x_scale, field_x, y_scale, field_y) {
     // Define the div for the tooltip
     var div = d3.select("body").append("div")
         .attr("class", "tooltip")
@@ -255,7 +255,10 @@ function add_tooltip(g, state_data, x_scale, field_x, y_scale, field_y) {
             div.transition()
                 .duration(10)
                 .style("opacity", .9);
-            div.html(d[field_x] + "<br/>" + d[field_y])
+            div.html(
+                "<strong>state : </strong>" + state_name + "<br/>" +
+                "<strong>" + field_x + ": </strong>" + d[field_x] + "<br/>" +
+                "<strong>" + field_y + ": </strong>" + d[field_y])
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
