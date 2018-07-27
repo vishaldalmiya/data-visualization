@@ -166,7 +166,6 @@ function display_map() {
 }
 
 function display_chart(field_x, field_y, x_label, y_label) {
-
     get_filter_info();
 
     var { width, height, g, svg, margin } = setup_svg();
