@@ -51,6 +51,8 @@
     <small>
         <p>I have used interactive slideshow as the medium for the narrative visualization for dataset related to
             <b>"Honey Production in US". </b>
+            <b>Next</b> and
+            <b>Prev</b> buttons are used to navigaet the slide show with options to drill down using tooltip.
         </p>
         <p>
             <ul>
@@ -75,20 +77,24 @@
                         <b>Price per lb trend:</b> This scene shows the price per lb trend across states for years 1998-2012.</li>
                 </ul>
                 <li>
-                    <b>Annotations: </b>Following are the annotations that were added to therelevant slides:</li>
+                    <b>Annotations: </b>Following are the annotations that were added to the relevant slides which had same
+                    formatting for visual consistency:</li>
                 <ul>
                     <li>
                         <b>Total production trend</b>: An annotation was added to the year 2006. This was to help the reader
-                        to demarcate the trend in total production of honey before and after the year 2006 (the year of Colony
-                        Collapse Disorder).
+                        to demarcate the trend in total production of honey before and after the year 2006 (the year of "Colony
+                        Collapse Disorder").
                     </li>
 
                     <li>
                         <b>Price per lb trend: </b>When the scene transitioned from to Total production trend to Price per lb
                         trend, the previous annotation was cleared and a new one was added for the year 2003 to emphasize
-                        to the readers that for states OK &amp; SC the price per lb increased drastically by 2003, the same
-                        year they ceased production as well. This was done to show that price could have played a role in
-                        the reduction in honey production post 2006.</li>
+                        to the readers that for states
+                        <b>OK</b> &amp;
+                        <b>SC</b> the price per lb increased drastically by 2003, the same year they ceased production as well.
+                        This was done to show that price could have played a role in the reduction in honey production post
+                        2006.
+                    </li>
                 </ul>
                 <li>
                     <b>Parameters:</b>
@@ -98,16 +104,18 @@
                         <b>Total production:</b> To show the states with the highest and lowest honey production from 1998-2012,
                         a map has been used which provides an overview as to the relative honey production among the different
                         states in US. The saturation has been used to identify the highest (ND) &amp; lowest (SC) honey production
-                        states (cumulative of 1998-2012) &amp; these two states have been labeled with the total production.
-                        Details for the other states will show up in tooltip.
+                        states (cumulative of 1998-2012) &amp; only the states with highest and lowest total production have
+                        been labeled with the
+                        <b>state name and total production</b> to draw users attention to the same. Details for the other states
+                        will show up in tooltip.
                     </li>
 
                     <li>
                         <b>Total production trend</b>: The X axis represents the year (independent variable) and the Y axis
                         represents the total production of honey (dependent variable) per year in lbs. Line chart with different
                         colors represent the total production per state. A line chart was chosen here since year is a continuous
-                        variable. Different colors were added to different state since it’s a nominal data. A line chart
-                        and not stacked line chart was used to understand the trend better per state which helps in the inference
+                        variable. Different colors were added to different state since its a nominal data. A line chart and
+                        not stacked line chart was used to understand the trend better per state which helps in the inference
                         section.
                     </li>
 
@@ -115,12 +123,19 @@
                         <b>Price per lb trend:</b> The X axis represents the year (independent variable) and the Y axis represents
                         the price per lb (dependent variable) of honey per year in lbs. Line chart with different colors
                         represent the price per lb per state. A line chart was chosen here since year is a continuous variable.
-                        Different colors were added to different state since it’s a nominal data.</li>
+                        Different colors were added to different state since its a nominal data.</li>
                 </ul>
                 <li>
-                    <b>Triggers: </b>The main triggers were the "Next" and "Previous" buttons on every scene which enabled the
-                    user to navigate through slides. These buttons rendered new scenes with different parameters (as described
-                    in the parameters section above)
+                    <b>Triggers: </b>The main triggers for thr user are the
+                    <b>Next</b> and
+                    <b>Previous</b> buttons on every scene which enabled the user to navigate through slides. These buttons
+                    rendered new scenes with different parameters. For example when the user navigates from the scene
+                    <b>Total production trend</b> to
+                    <b>Price per lb trend</b>, the
+                    <b>X axis</b> remains year but
+                    <b>Y axis</b> changes from total production per year per state to price per lb per year per state. Also
+                    tooltip is added to both the charts where the parameters and corresponding values show up when the user
+                    hovers it mouse on the data point.
                 </li>
             </ul>
         </p>

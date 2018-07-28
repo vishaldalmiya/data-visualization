@@ -9,18 +9,18 @@ function parse_state_data(data) {
     return state_db
 }
 
-// todo - try to add name and total production for lowest and highest
 // todo - d3.transition()
 // todo - check the criterias mentioned by Dr. Hart
-// todo - add in map info its cummulative from ..-.. years
-// todo - remove comma from the year
+// todo - increase the font size and color for the information in map
 
-
+// todo - try to add name and total production for lowest and highest
 // todo - add annotations
 // todo - fix the text for price per lb
 // todo - add the about page 
 // todo - clean up the tooltip
 // todo - disable prev & next
+// todo - remove comma from the year
+// todo - add in map info its cummulative from ..-.. years
 
 function get_sorted_hash(inputHash) {
     var resultHash = {};
@@ -167,9 +167,6 @@ function display_map() {
                 if (state_id_name[+d.id] == "ND" || state_id_name[+d.id] == "SC") {
                     return state_id_name[+d.id] + ": " + sorted_state_totalprod[state_id_name[+d.id]];
                 }
-                else {
-                    return state_id_name[+d.id]
-                }
             })
             .attr("x", function (d) {
                 return path.centroid(d)[0];
@@ -297,7 +294,6 @@ function get_filter_info() {
 
 function setup_scale(width, height, db, field_x, field_y) {
     var color_scale = d3.scaleOrdinal(d3.schemeCategory10);
-    // todo: check on this
     var x_scale = d3.scaleTime()
         .range([0, width]);
     var y_scale = d3.scaleLinear()
