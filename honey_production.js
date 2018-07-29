@@ -11,8 +11,8 @@ function parse_state_data(data) {
 
 // todo - d3.transition()
 // todo - check the criterias mentioned by Dr. Hart
-// todo - increase the font size and color for the information in map
 
+// todo - increase the font size and color for the information in map
 // todo - try to add name and total production for lowest and highest
 // todo - add annotations
 // todo - fix the text for price per lb
@@ -101,36 +101,6 @@ function display_map() {
         .attr("class", "key")
         .attr("transform", "translate(0,40)");
 
-    // todo: remove if not required
-    // g.selectAll("rect")
-    //     .data(color.range().map(function (d) {
-    //         d = color.invertExtent(d);
-    //         if (d[0] == null) d[0] = x.domain()[0];
-    //         if (d[1] == null) d[1] = x.domain()[1];
-    //         return d;
-    //     }))
-    //     .enter().append("rect")
-    //     .attr("height", 8)
-    //     .attr("x", function (d) { return x(d[0]); })
-    //     .attr("width", function (d) { return x(d[1]) - x(d[0]); })
-    //     .attr("fill", function (d) { return color(d[0]); });
-
-    // g.append("text")
-    //     .attr("class", "caption")
-    //     .attr("x", x.range()[0])
-    //     .attr("y", -6)
-    //     .attr("fill", "#000")
-    //     .attr("text-anchor", "start")
-    //     .attr("font-weight", "bold")
-    //     .text("Total production of Honey");
-
-    // g.call(d3.axisBottom(x)
-    //     .tickSize(13)
-    //     .tickFormat(function (x, i) { return i ? x : x + "%"; })
-    //     .tickValues(color.domain()))
-    //     .select(".domain")
-    //     .remove();
-
     d3.queue()
         .defer(d3.json, "https://d3js.org/us-10m.v1.json")
         .defer(d3.tsv, "us-state-names.tsv", function (d) {
@@ -205,7 +175,7 @@ function display_chart(field_x, field_y, x_label, y_label) {
             .x(function (d) { return x_scale(d[field_x]); })
             .y(function (d) { return y_scale(d[field_y]); });
 
-        display_axis(g, height, x_scale, y_scale, x_label, y_label);
+        display_axis(g, height, width, margin, x_scale, y_scale, x_label, y_label);
 
         // get the list of states by totalprod
         var { filtered_state_name, i } = get_filtered_state();
@@ -339,23 +309,30 @@ function setup_svg() {
     return { width, height, g, svg, margin };
 }
 
-function display_axis(g, height, x_scale, y_scale, x_label, y_label) {
-    // todo: check why the label is not working
+function display_axis(g, height, width, margin, x_scale, y_scale, x_label, y_label) {
     g.append("g")
-        .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x_scale))
-        .select(".domain")
-        .text(x_label)
-        .remove();
+        .call(d3.axisBottom(x_scale));
+
+    g.append("text")
+        //.attr("fill", "#000")
+        .attr("transform",
+            "translate(" + (width / 2) + " ," +
+            (height + 30) + ")")
+        // .attr("y", 6)
+        // .attr("dy", "0.71em")
+        .style("text-anchor", "end")
+        .text(x_label);
 
     g.append("g")
         .call(d3.axisLeft(y_scale))
-        .append("text")
-        .attr("fill", "#000")
+
+    g.append("text")
+        //.attr("fill", "#000")
         .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", "0.71em")
+        .attr("y", -80)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
         .attr("text-anchor", "end")
         .text(y_label);
 }
