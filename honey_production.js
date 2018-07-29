@@ -9,19 +9,7 @@ function parse_state_data(data) {
     return state_db
 }
 
-// todo - d3.transition()
 // todo - check the criterias mentioned by Dr. Hart
-// todo - something incorrect with year and tooltip
-
-// todo - increase the font size and color for the information in map
-// todo - try to add name and total production for lowest and highest
-// todo - add annotations
-// todo - fix the text for price per lb
-// todo - add the about page 
-// todo - clean up the tooltip
-// todo - disable prev & next
-// todo - remove comma from the year
-// todo - add in map info its cummulative from ..-.. years
 
 function get_sorted_hash(inputHash) {
     var resultHash = {};
