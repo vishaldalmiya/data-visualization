@@ -52,36 +52,54 @@
         <p>I have used interactive slideshow as the medium for the narrative visualization for dataset related to
             <b>"Honey Production in US". </b>
             <b>Next</b> and
-            <b>Prev</b> buttons are used to navigaet the slide show with options to drill down using tooltip.
+            <b>Prev</b> buttons are used to navigate the slide show with options to drill down using tooltip which displays
+            information about the parameters when the user hover over the data point of interest.
         </p>
         <p>
             <ul>
                 <li>
                     <b>Scenes</b>: Same template has been used across all scenes (e.g. similar formatting, fonts, svg size,
-                    etc). Also, D3 transitions have been deployed to make the transition smooth between scenes. There are
-                    namely 4 scenes used for the interactive slide show:</li>
+                    etc). There are namely 4 scenes used for the interactive slide show:</li>
                 <ul>
                     <li>
                         <b>Overview: </b>This scene provides an overview of what the dataset is, where it is obtained from and
                         what questions will be answered as part of this narrative visualization.</li>
                     <li>
-                        <b>Total production:</b> This scene represented the cumulative honey production per state from year
-                        1998-2012 to help identify the highest and lowest honey production states in US </li>
+                        <b>Total production:</b> This scene represents the cumulative honey production per state from year 1998-2012.
+                        To show the states with the highest and lowest honey production from 1998-2012, a choropleth map
+                        has been used which provides an overview as to the relative honey production among the different
+                        states in US. The saturation has been used to reflect the relative honey production among states
+                        (cumulative of 1998-2012) &amp; only the states with highest and lowest total production have been
+                        labeled with the
+                        <b>state name and total production</b> to draw users attention to the same. Details for the other states
+                        will show up in tooltip </li>
 
                     <li>
                         <b>Total production trend:</b> This scene shows the total honey production trend across states for years
-                        1998-2012
+                        1998-2012. The X axis represents the year (independent variable) and the Y axis represents the total
+                        production of honey (dependent variable) per year in lbs. Line chart with different colors represent
+                        the total production per state. A line chart was chosen here since year is a continuous variable.
+                        Different colors were added to different state since its a nominal data. A line chart and not stacked
+                        line chart was used to understand the trend better per state which helps in the inference section.
                     </li>
 
                     <li>
-                        <b>Price per lb trend:</b> This scene shows the price per lb trend across states for years 1998-2012.</li>
+                        <b>Price per lb trend:</b> This scene shows the price per lb trend across states for years 1998-2012.
+                        The X axis represents the year (independent variable) and the Y axis represents the price per lb
+                        (dependent variable) of honey per year in lbs. Line chart with different colors represent the price
+                        per lb per state. A line chart was chosen here since year is a continuous variable. Different colors
+                        were added to different state since its a nominal data.</li>
                 </ul>
                 <li>
-                    <b>Annotations: </b>Following are the annotations that were added to the relevant slides which had same
-                    formatting for visual consistency:</li>
+                    <b>Annotations: </b>Following are the annotations that were added to the relevant slides:</li>
                 <ul>
                     <li>
-                        <b>Total production trend</b>: An annotation was added to the year 2006. This was to help the reader
+                        <b>Total production: </b> The main data to highlight here were the states with highest and lowest total
+                        production of honey for which the corresponding states have been marked with their state name and
+                        the total production.
+                    </li>
+                    <li>
+                        <b>Total production trend: </b>An annotation was added to the year 2006. This was to help the reader
                         to demarcate the trend in total production of honey before and after the year 2006 (the year of "Colony
                         Collapse Disorder").
                     </li>
@@ -101,41 +119,46 @@
                 </li>
                 <ul>
                     <li>
-                        <b>Total production:</b> To show the states with the highest and lowest honey production from 1998-2012,
-                        a map has been used which provides an overview as to the relative honey production among the different
-                        states in US. The saturation has been used to identify the highest (ND) &amp; lowest (SC) honey production
-                        states (cumulative of 1998-2012) &amp; only the states with highest and lowest total production have
-                        been labeled with the
-                        <b>state name and total production</b> to draw users attention to the same. Details for the other states
-                        will show up in tooltip.
+                        <b>Total production: </b> The main parameters in this scene are the states, their cummulative total honey
+                        production and the year range (1998-2012) over which the cummulation was done .
                     </li>
 
                     <li>
-                        <b>Total production trend</b>: The X axis represents the year (independent variable) and the Y axis
-                        represents the total production of honey (dependent variable) per year in lbs. Line chart with different
-                        colors represent the total production per state. A line chart was chosen here since year is a continuous
-                        variable. Different colors were added to different state since its a nominal data. A line chart and
-                        not stacked line chart was used to understand the trend better per state which helps in the inference
-                        section.
+                        <b>Total production trend: </b>The main parameters here are the state, total production per year and
+                        the year range (1998-201).
                     </li>
 
                     <li>
-                        <b>Price per lb trend:</b> The X axis represents the year (independent variable) and the Y axis represents
-                        the price per lb (dependent variable) of honey per year in lbs. Line chart with different colors
-                        represent the price per lb per state. A line chart was chosen here since year is a continuous variable.
-                        Different colors were added to different state since its a nominal data.</li>
+                        <b>Price per lb trend: </b> The main parameters here are the state, price per lb per year and the year
+                        range (1998-201).
+                    </li>
                 </ul>
                 <li>
-                    <b>Triggers: </b>The main triggers for thr user are the
+                    <b>Triggers: </b>The main triggers for the user are the
                     <b>Next</b> and
                     <b>Previous</b> buttons on every scene which enabled the user to navigate through slides. These buttons
-                    rendered new scenes with different parameters. For example when the user navigates from the scene
-                    <b>Total production trend</b> to
-                    <b>Price per lb trend</b>, the
-                    <b>X axis</b> remains year but
-                    <b>Y axis</b> changes from total production per year per state to price per lb per year per state. Also
-                    tooltip is added to both the charts where the parameters and corresponding values show up when the user
-                    hovers it mouse on the data point.
+                    rendered new scenes with different parameters. Examples of the same:
+                    <ul>
+                        <li>
+                            When the user navigates from the scene
+                            <b>Total production</b> to
+                            <b>Total production trend</b>, using the
+                            <b>Next</b> button, the maps changes to a line chart and instead of displaying the total production
+                            cummulative for all years it shows total production per year.
+                        </li>
+                        <li>
+                            When the user navigates from the scene
+                            <b>Total production trend</b> to
+                            <b>Price per lb trend</b>, using the
+                            <b>Next</b> button, the
+                            <b>X axis</b> remains year but
+                            <b>Y axis</b> changes from total production per year per state to price per lb per year per state.
+                        </li>
+                        <li>
+                            Vice-versa happens for the above scenes when user clicks on
+                            <b>Previous</b> button.
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </p>
