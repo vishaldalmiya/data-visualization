@@ -11,6 +11,7 @@ function parse_state_data(data) {
 
 // todo - d3.transition()
 // todo - check the criterias mentioned by Dr. Hart
+// todo - something incorrect with year and tooltip
 
 // todo - increase the font size and color for the information in map
 // todo - try to add name and total production for lowest and highest
@@ -245,7 +246,7 @@ function add_tooltip(g, state_name, state_data, x_scale, field_x, y_scale, field
                 .style("opacity", .9);
             div.html(
                 "<strong>state : </strong>" + state_name + "<br/>" +
-                "<strong>" + field_x + ": </strong>" + d[field_x] + "<br/>" +
+                "<strong>" + field_x + ": </strong>" + d[field_x].getFullYear() + "<br/>" +
                 "<strong>" + field_y + ": </strong>" + d[field_y])
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
