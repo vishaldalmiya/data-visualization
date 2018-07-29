@@ -175,7 +175,7 @@ function display_map() {
                 return path.centroid(d)[1];
             })
             .attr("text-anchor", "middle")
-            .attr('font-size', '6pt');
+            .attr('font-size', '11pt');
         // svg.append("path")
         //     .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
         //     .attr("class", "states")
