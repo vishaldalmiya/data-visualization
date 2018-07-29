@@ -285,7 +285,6 @@ function get_filtered_state() {
     var sorted_state_name_totalprod = keys.map(function (v) { return sorted_state_totalprod[v]; });
     var filtered_state_name = [];
 
-    // todo: unknown entry at the end
     for (var i = 1; i <= num_top_state_by_totalprod; i++) {
         filtered_state_name.push(sorted_state_name_totalprod[sorted_state_name_totalprod.length - 1 - i]);
     }
@@ -315,12 +314,9 @@ function display_axis(g, height, width, margin, x_scale, y_scale, x_label, y_lab
         .call(d3.axisBottom(x_scale));
 
     g.append("text")
-        //.attr("fill", "#000")
         .attr("transform",
             "translate(" + (width / 2) + " ," +
             (height + 30) + ")")
-        // .attr("y", 6)
-        // .attr("dy", "0.71em")
         .style("text-anchor", "end")
         .text(x_label);
 
@@ -328,7 +324,6 @@ function display_axis(g, height, width, margin, x_scale, y_scale, x_label, y_lab
         .call(d3.axisLeft(y_scale))
 
     g.append("text")
-        //.attr("fill", "#000")
         .attr("transform", "rotate(-90)")
         .attr("y", -80)
         .attr("x", 0 - (height / 2))
