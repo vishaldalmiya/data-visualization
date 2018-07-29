@@ -48,12 +48,24 @@ function sort_state_by_totalprod(state_db) {
 }
 
 function draw_line_chart(g, data, line, x_scale, y_scale, color, field_x, field_y) {
-    g.append("path")
+    p = g.append("path")
         .datum(data)
         .attr("fill", "none")
         .attr("stroke", color)
         .attr("stroke-width", 2.0)
         .attr("d", line)
+
+    // Add transition
+    p.transition().duration(1500).attrTween("d", pathTween1);
+    function pathTween1() {
+        var interpolate = d3.scaleQuantile()
+            .domain([0, 1])
+            .range(d3.range(1, data.length + 1));
+        return function (t) {
+            return line(data.slice(0, interpolate(t)));
+        };
+    }
+
 }
 
 function display_map() {
@@ -151,6 +163,9 @@ function display_map() {
 }
 
 function display_chart(field_x, field_y, x_label, y_label) {
+
+
+
     get_filter_info();
 
     var { width, height, g, svg, margin } = setup_svg();

@@ -101,6 +101,7 @@
         }
         function totalprod() {
             location.href = "totalprod.html"
+            location.class = "transition"
         }
         function priceperlb() {
             location.href = "priceperlb.html"
@@ -110,25 +111,6 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="honey_production.js"></script>
     <script>display_chart('year', 'priceperlb', 'Year', 'Avg. price per lb')</script>
-
-    <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("body").css("display", "none");
-
-            $("body").fadeIn(2000);
-
-            $("a.transition").click(function (event) {
-                event.preventDefault();
-                linkLocation = this.href;
-                $("body").fadeOut(1000, redirectPage);
-            });
-
-            function redirectPage() {
-                window.location = linkLocation;
-            }
-        });
-    </script>
 </body>
 
 </html>
