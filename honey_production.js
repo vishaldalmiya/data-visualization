@@ -147,10 +147,6 @@ function display_map() {
             })
             .attr("text-anchor", "middle")
             .attr('font-size', '11pt');
-        // svg.append("path")
-        //     .datum(topojson.mesh(us, us.objects.states, function (a, b) { return a !== b; }))
-        //     .attr("class", "states")
-        //     .attr("d", path);
     }
 }
 
@@ -246,7 +242,7 @@ function add_tooltip(g, state_name, state_data, x_scale, field_x, y_scale, field
                 .style("opacity", .9);
             div.html(
                 "<strong>state : </strong>" + state_name + "<br/>" +
-                "<strong>" + field_x + ": </strong>" + d[field_x].getFullYear() + "<br/>" +
+                "<strong>" + field_x + ": </strong>" + (parseInt(d[field_x].getFullYear()) + 1) + "<br/>" +
                 "<strong>" + field_y + ": </strong>" + d[field_y])
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
